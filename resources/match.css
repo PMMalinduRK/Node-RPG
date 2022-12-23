@@ -1,0 +1,57 @@
+#header{
+    display: block;
+    height: 100px;
+    text-align: center;
+    border: 1px solid black;
+    margin-bottom: 20px;
+}
+#player{
+    float: left;
+    border: 1px dotted gray;
+    padding: 5px;
+}
+#enemy{
+    float: right;
+    border: 1px dotted gray;
+    padding: 5px;
+}
+#enemy-stat-container{
+    float: right;
+}
+.hp-bar-container{
+    height: 20px;
+    width: 200px;
+    border: 1px solid black;
+    margin: 10px;
+    padding: 3px;
+}
+.hp-bar{
+    background-color: red;
+    height: 100%;
+}
+#player-hp{
+    width: 100%;
+}
+#enemy-hp{
+    width: 100%;
+}
+#enemy-hp-value{
+    color: red;
+}
+.ep-bar-container{
+    height: 20px;
+    width: 200px;
+    border: 1px solid black;
+    margin: 10px;
+    padding: 3px;
+}
+.ep-bar{
+    background-color: blue;
+    height: 100%;
+}
+#player-ep{
+    width: 100%;
+}
+#enemy-ep{
+    width: 100%;
+}
