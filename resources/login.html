@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script>
+            function go(){
+                let player_id = $("#player-id").val();
+                document.cookie = "player="+player_id;
+                window.location.href = "/match";
+            }
+        </script>
+    </head>
+    <body>
+        <!--form action="/match">
+            <label for="player">Enter your player ID: </label>
+            <input type="text" name="player">
+            <input type="submit" value="Login">
+        </form-->
+
+        <label for="player">Enter your player ID: </label>
+        <input type="text" id="player-id">
+        <button onclick="go();">Click me</button>
+    </body>
+</html>
