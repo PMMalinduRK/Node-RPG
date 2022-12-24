@@ -18,12 +18,4 @@ $(function() {
         player = c.substring(name.length, c.length);
         }
     }
-
-    socket.emit("player waiting", player);
-
-    socket.on("player join", function(new_player){
-        console.log("New player joined the lobby");
-        console.log(new_player);
-        $("#moves-col").append(new_player+" has joined the game");
-    });
 });
