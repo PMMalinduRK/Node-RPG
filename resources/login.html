@@ -3,13 +3,8 @@
     <head>
         <title>Login</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-        <script>
-            function go(){
-                let player_id = $("#player-id").val();
-                document.cookie = "player="+player_id;
-                window.location.href = "/match";
-            }
-        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.3/socket.io.js" integrity="sha512-iWPnCISAd/J+ZacwV2mbNLCaPGRrRo5OS81lKTVPtRg1wGTC20Cfmp5Us5RcbLv42QLdbAWl0MI57yox5VecQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="login.js"></script>
     </head>
     <body>
         <!--form action="/match">
@@ -20,6 +15,6 @@
 
         <label for="player">Enter your player ID: </label>
         <input type="text" id="player-id">
-        <button onclick="go();">Click me</button>
+        <button id="btn-login">Click me</button>
     </body>
 </html>
