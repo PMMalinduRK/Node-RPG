@@ -1,8 +1,15 @@
 $(function(){
-    $("#btn-login").click(function(){
-        let player_id = $("#player-id").val();
 
-        document.cookie = "player="+player_id;
+  let socket = io("http://localhost:3000");
+
+    $("#btn-login").click(function(){
+
+        let username = $("#username").val();
+        let password = $("#password").val();
+
+        socket.emit("user auth", username, password);
+
+        document.cookie = "player="+username;
         window.location.href = "/main";
     });
 });
