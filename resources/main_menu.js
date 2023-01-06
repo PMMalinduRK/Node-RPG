@@ -1,5 +1,10 @@
 $(function(){
-    let socket = io("http://localhost:3000");
+    //let socket = io("http://localhost:3000");
+    var socket = io({
+        transports: [
+        ]
+      });
+      
 
     // Hide the cancel button until the player clicks on play
     $("#cancel-matchmaking").hide();

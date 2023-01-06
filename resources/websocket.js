@@ -3,7 +3,7 @@
 $(function() {
     console.log("websocket working");
 
-    let socket = io("http://localhost:3000");
+    let socket = io();
 
     let player;
     let name = "player=";

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.3/socket.io.js" integrity="sha512-iWPnCISAd/J+ZacwV2mbNLCaPGRrRo5OS81lKTVPtRg1wGTC20Cfmp5Us5RcbLv42QLdbAWl0MI57yox5VecQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="signup.js"></script>
+    </head>
+    <body>
+        <!--form action="/match">
+            <label for="player">Enter your player ID: </label>
+            <input type="text" name="player">
+            <input type="submit" value="Login">
+        </form-->
+
+        <label for="player">Enter your username: </label>
+        <input type="text" name="player" id="username" required>
+        <label for="email">Enter your email: </label>
+        <input type="text" name="email" id="email" required>
+        <label for="password">Enter your password: </label>
+        <input type="password" name="password" id="password" required>
+        <label for="c_password">Confirm your password: </label>
+        <input type="password" name="c_password" id="c_password" required>
+        <button id="btn-signup">Signup</button> <br>
+
+        <p>Already have an account? <a href="/">Log in</a></p>
+    </body>
+</html>

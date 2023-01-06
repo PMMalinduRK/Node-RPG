@@ -7,7 +7,7 @@ const path = require('path');
 let socketIo = require("socket.io");
 
 var corsOptions = {
-    origin: "http://localhost:8081"
+    origin: "http://localhost:3001"
 };
 
 app.use(cors(corsOptions));
@@ -25,6 +25,9 @@ app.use(express.static(path.join(__dirname, "resources")));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/login.html'));
 });
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, '/resources/signup.html'));
+});
 app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/main_menu.html'));
 });
@@ -36,6 +39,7 @@ require('./app/routes/user.routes')(app);
 
 
 const db = require("./app/models");
+const { log } = require('console');
 const Role = db.role;
 
 db.mongoose
@@ -55,25 +59,24 @@ db.mongoose
 
 // Setup the websocket.
 let io = socketIo(server);
+//const io = require("socket.io")(http); // no cors configuration.
 
 io.on("connection", function(socket) {
     console.log("Connected to socket");
     socket.on("player waiting", function(player){
         // Database stuff
+        console.log("Player waiting");
     });
     socket.on("player exited matchmaking", function(player){
         // Remove player from matchmaking list
     });
-    socket.on("user auth", function(user, pass){
-        main(user, pass).catch(console.error);
-    })
 });
 
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+    console.log(`Server is running on port ${PORT}.`);
 });
 
 

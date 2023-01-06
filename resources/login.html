@@ -5,6 +5,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.3/socket.io.js" integrity="sha512-iWPnCISAd/J+ZacwV2mbNLCaPGRrRo5OS81lKTVPtRg1wGTC20Cfmp5Us5RcbLv42QLdbAWl0MI57yox5VecQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="login.js"></script>
+        <!--script src="login_test.js"></script-->
     </head>
     <body>
         <!--form action="/match">
@@ -14,9 +15,11 @@
         </form-->
 
         <label for="player">Enter your username: </label>
-        <input type="text" name="player" id="username">
+        <input type="text" name="player" id="username" required>
         <label for="password">Enter your password: </label>
-        <input type="password" name="password" id="password">
-        <button id="btn-login">Click me</button>
+        <input type="password" name="password" id="password" required>
+        <button id="btn-login">Login</button>
+
+        <p>Don't have an account? <a href="/signup">Signup</a></p>
     </body>
 </html>
