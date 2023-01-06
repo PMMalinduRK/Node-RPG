@@ -20,6 +20,6 @@ $(function(){
         });
 
         document.cookie = "player="+username;
-        //window.location.href = "/main";
+        window.location.href = "/main";
     });
 });

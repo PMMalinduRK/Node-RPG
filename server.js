@@ -31,11 +31,12 @@ app.get('/signup', (req, res) => {
 app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/main_menu.html'));
 });
-app.get('/match', (req, res) => {
-    res.sendFile(path.join(__dirname, '/resources/match.html'));
+app.get('/lobby', (req, res) => {
+    res.sendFile(path.join(__dirname, '/resources/lobby.html'));
 });
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
+require('./app/routes/lobby.routes')(app);
 
 
 const db = require("./app/models");
@@ -67,8 +68,8 @@ io.on("connection", function(socket) {
         // Database stuff
         console.log("Player waiting");
     });
-    socket.on("player exited matchmaking", function(player){
-        // Remove player from matchmaking list
+    socket.on("player exited lobbymaking", function(player){
+        // Remove player from lobbymaking list
     });
 });
 

@@ -32,6 +32,20 @@ $(function(){
         $("#welcome-msg").text("Searching for players...");
         $("#cancel-matchmaking").show();
         socket.emit("player waiting", player);
+
+        // Add player to the waiting lobby
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/api/lobby",
+            data: JSON.stringify({ "username": player }),
+            contentType: "application/json",
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (result, status) {
+                console.log(result);
+            }
+        });
     });
 
     $("#cancel-matchmaking").click(function(){
