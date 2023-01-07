@@ -13,13 +13,13 @@ module.exports = app => {
     router.get("/published", lobby.findAllPublished);
   
     // Retrieve a single Lobby with username
-    router.get("/:username", lobby.findOne);
+    router.get("/:id", lobby.findOne);
   
     // Update a Lobby with id
     router.put("/:id", lobby.update);
   
     // Delete a Lobby with username
-    router.delete("/:username", lobby.delete);
+    router.delete("/:id", lobby.delete);
   
     // Delete all Lobby
     router.delete("/", lobby.deleteAll);

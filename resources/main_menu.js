@@ -1,4 +1,6 @@
 $(function(){
+    // Initialize player id for later use
+    let player_id;
     //let socket = io("http://localhost:3000");
     var socket = io({
         transports: [
@@ -41,6 +43,7 @@ $(function(){
             contentType: "application/json",
             success: function (result) {
                 console.log(result);
+                player_id = result._id;
             },
             error: function (result, status) {
                 console.log(result);
@@ -53,5 +56,17 @@ $(function(){
         $("#welcome-msg").text("Welcome "+player+"!");
         $("#cancel-matchmaking").hide();
         socket.emit("player exited matchmaking", player);
+
+        // Remove player from the waiting lobby
+        $.ajax({
+            type: "DELETE",
+            url: "http://localhost:3000/api/lobby/"+player_id,
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (result, status) {
+                console.log(result);
+            }
+        });
     });
 });

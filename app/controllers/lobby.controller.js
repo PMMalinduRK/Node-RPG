@@ -57,13 +57,13 @@ exports.update = (req, res) => {
 
 // Delete a Lobby with the specified username in the request
 exports.delete = (req, res) => {
-    const user = req.params.username;
+    const id = req.params.id;
 
-    Lobby.findByIdAndRemove(user)
+    Lobby.findByIdAndRemove(id)
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                message: `Cannot delete User with id=${user}. Maybe User was not found!`
+                message: `Cannot delete User with id=${id}. Maybe User was not found!`
                 });
             } else {
                 res.send({
@@ -73,8 +73,9 @@ exports.delete = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Could not delete User with username=" + user
+                message: "Could not delete User with id=" + id
             });
+            console.log(err);
         });
 };
 
