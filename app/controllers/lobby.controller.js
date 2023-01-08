@@ -35,19 +35,7 @@ exports.findAll = (req, res) => {
 
 // Find a single user with username
 exports.findOne = (req, res) => {
-    const user = req.params.username;
 
-    Lobby.findById(user)
-        .then(data => {
-            if (!data)
-                res.status(404).send({ message: "Cannot find user with username " + user });
-            else res.send(data);
-        })
-        .catch(err => {
-            res
-                .status(500)
-                .send({ message: "Error retrieving User with username=" + user });
-        });
 };
 
 // Update a Lobby by the id in the request
@@ -87,4 +75,26 @@ exports.deleteAll = (req, res) => {
 // Find all published Lobbys
 exports.findAllPublished = (req, res) => {
   
+};
+
+// Count the number of players in the lobby
+exports.countPlayers = (req, res) => {
+    Lobby.countDocuments()
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                message: "There are no players online"
+                });
+            } else {
+                res.send({
+                message: `There are ${data} players online`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error finding players"
+            });
+            console.log(err);
+        });
 };

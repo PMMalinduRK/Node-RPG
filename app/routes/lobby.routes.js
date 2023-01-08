@@ -23,6 +23,9 @@ module.exports = app => {
   
     // Delete all Lobby
     router.delete("/", lobby.deleteAll);
+
+    // Count players in lobby
+    router.get("/count/players", lobby.countPlayers);
   
     app.use('/api/lobby', router);
   };
