@@ -4,7 +4,9 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const path = require('path');
-let socketIo = require("socket.io");
+const { Server } = require("socket.io");
+const io = new Server(server);
+// let socketIo = require("socket.io");
 
 var corsOptions = {
     origin: "http://localhost:3001"
@@ -59,14 +61,15 @@ db.mongoose
 
 
 // Setup the websocket.
-let io = socketIo(server);
+// let io = socketIo(server);
 //const io = require("socket.io")(http); // no cors configuration.
 
-io.on("connection", function(socket) {
+io.on("connection", (socket) => {
     console.log("Connected to socket");
+    socket.emit("Sent from socket");
     socket.on("player waiting", function(player){
         // Database stuff
-        console.log("Player waiting");
+        console.log(`Player ${player} is waiting in lobby`);
     });
     socket.on("player exited lobbymaking", function(player){
         // Remove player from lobbymaking list
@@ -76,7 +79,8 @@ io.on("connection", function(socket) {
 
 // set port, listen for requests
 const PORT = 3000;
-app.listen(PORT, () => {
+// This isn't app.listen but server.listen
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
 

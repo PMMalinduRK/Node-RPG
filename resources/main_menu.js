@@ -2,11 +2,7 @@ $(function(){
     // Initialize player id for later use
     let player_id;
     //let socket = io("http://localhost:3000");
-    var socket = io({
-        transports: [
-        ]
-      });
-      
+    var socket = io();
 
     // Hide the cancel button until the player clicks on play
     $("#cancel-matchmaking").hide();
