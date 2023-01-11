@@ -1,6 +1,8 @@
+// TODO put all ajax calls in separate functions
 $(function(){
-    // Initialize player id for later use
+    // Initialize variables for later use
     let player_id;
+    let player_count;
     //let socket = io("http://localhost:3000");
     var socket = io();
 
@@ -29,7 +31,6 @@ $(function(){
         $(this).prop('disabled', true);
         $("#welcome-msg").text("Searching for players...");
         $("#cancel-matchmaking").show();
-        socket.emit("player waiting", player);
 
         // Add player to the waiting lobby
         $.ajax({
@@ -38,11 +39,13 @@ $(function(){
             data: JSON.stringify({ "username": player }),
             contentType: "application/json",
             success: function (result) {
-                console.log(result);
+                // console.log(result);
                 player_id = result._id;
+                // Show the number of players in lobby
+                socket.emit("player waiting", player);
             },
             error: function (result, status) {
-                console.log(result);
+                // console.log(result);
             }
         });
     });
@@ -51,18 +54,41 @@ $(function(){
         $("#play").prop('disabled', false);
         $("#welcome-msg").text("Welcome "+player+"!");
         $("#cancel-matchmaking").hide();
-        socket.emit("player exited matchmaking", player);
 
         // Remove player from the waiting lobby
         $.ajax({
             type: "DELETE",
             url: "http://localhost:3000/api/lobby/"+player_id,
             success: function (result) {
+                // console.log(result);
+                // Show the number of players in lobby
+                socket.emit("player exited matchmaking", player);
+            },
+            error: function (result, status) {
+                // console.log(result);
+            }
+        });
+    });
+
+    socket.on("Recount lobby", function(){
+        console.log("Recounting lobby");
+        // Show the number of players in lobby
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:3000/api/lobby/count/players",
+            contentType : 'application/json',
+            dataType : 'json',
+            success: function (result) {
                 console.log(result);
+                player_count = result.message;
+                // Update text on the number of players in lobby
+                $("#players-lfm").text(player_count);
             },
             error: function (result, status) {
                 console.log(result);
+                $("#players-lfm").text(result.responseJSON.message);
             }
         });
     });
 });
+

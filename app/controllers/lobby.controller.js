@@ -83,11 +83,11 @@ exports.countPlayers = (req, res) => {
         .then(data => {
             if (!data) {
                 res.status(404).send({
-                message: "There are no players online"
+                message: "There are no players in lobby"
                 });
             } else {
                 res.send({
-                message: `There are ${data} players online`
+                message: `There are ${data} players in lobby`
                 });
             }
         })

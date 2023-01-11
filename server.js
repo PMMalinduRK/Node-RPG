@@ -66,13 +66,17 @@ db.mongoose
 
 io.on("connection", (socket) => {
     console.log("Connected to socket");
-    socket.emit("Sent from socket");
+    // socket.emit("Sent from socket");
     socket.on("player waiting", function(player){
         // Database stuff
         console.log(`Player ${player} is waiting in lobby`);
+        // socket.emit doesn't work here. io.emit does
+        io.emit("Recount lobby");
     });
-    socket.on("player exited lobbymaking", function(player){
-        // Remove player from lobbymaking list
+    socket.on("player exited matchmaking", function(player){
+        // Remove player from matchmaking list
+        console.log(`Player ${player} exited the lobby`);
+        io.emit("Recount lobby");
     });
 });
 
