@@ -101,6 +101,7 @@ $(function(){
     socket.on("enter match", function(player1, player2){
         // Send only the relevent two players into the match
         if(player1 == player || player2 == player){
+            console.log(player1 + " vs " + player2);
             // Remove player from the waiting lobby
             $.ajax({
                 type: "DELETE",
@@ -114,6 +115,11 @@ $(function(){
                     // console.log(result);
                 }
             });
+            if(player1 == player){
+                document.cookie = "player2="+encodeURIComponent(player2);
+            } else {
+                document.cookie = "player2="+encodeURIComponent(player1);
+            }
             // Load match
             window.location.href = "/match";
         }

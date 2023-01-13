@@ -33,7 +33,7 @@ $(function(){
             }
         });
 
-        document.cookie = "player="+username;
+        document.cookie = "player="+encodeURIComponent(username);
         //window.location.href = "/api/test/user";
     });
 });

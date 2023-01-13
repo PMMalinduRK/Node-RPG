@@ -123,11 +123,6 @@ io.on("connection", (socket) => {
             let xhr = new XMLHttpRequest();
             xhr.open('POST',url);
             xhr.setRequestHeader('Content-Type','application/json');
-            xhr.onreadystatechange = function (){
-                if(xhr.readyState===4){
-                    console.log(JSON.parse(xhr.responseText).shortUrl);
-                }
-            }
             xhr.send(data);
 
             // After the POST, send both players to the match
