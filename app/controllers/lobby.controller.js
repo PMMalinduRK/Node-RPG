@@ -30,7 +30,16 @@ exports.create = (req, res) => {
 
 // Retrieve all Lobbies from the database.
 exports.findAll = (req, res) => {
-  
+    Lobby.find()
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                err.message || "Some error occurred while retrieving lobbies."
+            });
+        });
 };
 
 // Find a single user with username
@@ -82,12 +91,13 @@ exports.countPlayers = (req, res) => {
     Lobby.countDocuments()
         .then(data => {
             if (!data) {
-                res.status(404).send({
-                message: "There are no players in lobby"
+                res.send({
+                    message: "There are no players in lobby"
                 });
             } else {
                 res.send({
-                message: `There are ${data} players in lobby`
+                    count: data,
+                    message: `There are ${data} players in lobby`
                 });
             }
         })

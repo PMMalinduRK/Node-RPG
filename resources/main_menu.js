@@ -2,6 +2,7 @@
 $(function(){
     // Initialize variables for later use
     let player_id;
+    let lobby_message;
     let player_count;
     //let socket = io("http://localhost:3000");
     var socket = io();
@@ -80,9 +81,15 @@ $(function(){
             dataType : 'json',
             success: function (result) {
                 console.log(result);
-                player_count = result.message;
+                lobby_message = result.message;
+                player_count = result.count;
                 // Update text on the number of players in lobby
-                $("#players-lfm").text(player_count);
+                $("#players-lfm").text(lobby_message);
+                // Connect to match if there are 2 players
+                if(player_count == "2"){
+                    console.log("Logged "+player);
+                    socket.emit("match found", player);
+                }
             },
             error: function (result, status) {
                 console.log(result);
@@ -90,5 +97,25 @@ $(function(){
             }
         });
     });
-});
 
+    socket.on("enter match", function(player1, player2){
+        // Send only the relevent two players into the match
+        if(player1 == player || player2 == player){
+            // Remove player from the waiting lobby
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:3000/api/lobby/"+player_id,
+                success: function (result) {
+                    // console.log(result);
+                    // Show the number of players in lobby
+                    socket.emit("player exited matchmaking", player);
+                },
+                error: function (result, status) {
+                    // console.log(result);
+                }
+            });
+            // Load match
+            window.location.href = "/match";
+        }
+    })
+});

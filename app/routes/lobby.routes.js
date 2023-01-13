@@ -9,9 +9,6 @@ module.exports = app => {
     // Retrieve all Lobby
     router.get("/", lobby.findAll);
   
-    // Retrieve all published Lobby
-    router.get("/published", lobby.findAllPublished);
-  
     // Retrieve a single Lobby with username
     router.get("/:id", lobby.findOne);
   

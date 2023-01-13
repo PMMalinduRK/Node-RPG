@@ -6,7 +6,12 @@ const server = http.createServer(app);
 const path = require('path');
 const { Server } = require("socket.io");
 const io = new Server(server);
-// let socketIo = require("socket.io");
+
+
+// This is for making requests through the server
+let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+let url = 'http://localhost:3000/api/match/';
+
 
 var corsOptions = {
     origin: "http://localhost:3001"
@@ -28,7 +33,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/login.html'));
 });
 app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, '/resources/signup.html'));
+    res.sendFile(path.join(__dirname, '/resources/signup.html'));
 });
 app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/main_menu.html'));
@@ -36,9 +41,14 @@ app.get('/main', (req, res) => {
 app.get('/lobby', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/lobby.html'));
 });
+app.get('/match', (req, res) => {
+    res.sendFile(path.join(__dirname, '/resources/match.html'));
+});
+
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);
 require('./app/routes/lobby.routes')(app);
+require('./app/routes/match.routes')(app);
 
 
 const db = require("./app/models");
@@ -46,24 +56,24 @@ const { log } = require('console');
 const Role = db.role;
 
 db.mongoose
-  .connect("mongodb+srv://MalinduRK:e0r2SWjof7Yh8e98@rpg-cluster.nb4qi3z.mongodb.net/Node_RPG?retryWrites=true&w=majority", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log("Successfully connect to MongoDB.");
-    initial();
-  })
-  .catch(err => {
-    console.error("Connection error", err);
-    process.exit();
-  });
+    .connect("mongodb+srv://MalinduRK:e0r2SWjof7Yh8e98@rpg-cluster.nb4qi3z.mongodb.net/Node_RPG?retryWrites=true&w=majority", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        console.log("Successfully connect to MongoDB.");
+        initial();
+    })
+    .catch(err => {
+        console.error("Connection error", err);
+        process.exit();
+    });
 
+
+// Initialize player count for matchmaking through the server
+let player_array = [];
 
 // Setup the websocket.
-// let io = socketIo(server);
-//const io = require("socket.io")(http); // no cors configuration.
-
 io.on("connection", (socket) => {
     console.log("Connected to socket");
     // socket.emit("Sent from socket");
@@ -78,6 +88,52 @@ io.on("connection", (socket) => {
         console.log(`Player ${player} exited the lobby`);
         io.emit("Recount lobby");
     });
+    socket.on("match found", function(player){
+        // Add players into an array
+        player_array.push(player);
+        console.log(player_array);
+        if(player_array.length == 2){
+            // Get date for the construction of match_id
+            const date = new Date();
+
+            // Process the json data
+            let player1 = player_array[0];
+            let player2 = player_array[1];
+            let match_id = player1 + player2 + date;
+
+            let data = JSON.stringify(
+                {
+                    "match_id": match_id,
+                    "player1": player1,
+                    "player2": player2,
+                    "match_data": {
+                        "player1": {
+                            "hp": "100",
+                            "ep": "100"
+                        },
+                        "player2": {
+                            "hp": "100",
+                            "ep": "100"
+                        }
+                    }
+                }
+            )
+
+            // Create a POST request through the server to create a match and add the two players into the match
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST',url);
+            xhr.setRequestHeader('Content-Type','application/json');
+            xhr.onreadystatechange = function (){
+                if(xhr.readyState===4){
+                    console.log(JSON.parse(xhr.responseText).shortUrl);
+                }
+            }
+            xhr.send(data);
+
+            // After the POST, send both players to the match
+            io.emit("enter match", player1, player2);
+        }
+    });
 });
 
 
@@ -90,37 +146,37 @@ server.listen(PORT, () => {
 
 
 function initial() {
-  Role.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: "user"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
+    Role.estimatedDocumentCount((err, count) => {
+        if (!err && count === 0) {
+            new Role({
+                name: "user"
+            }).save(err => {
+                if (err) {
+                    console.log("error", err);
+                }
+
+                console.log("added 'user' to roles collection");
+            });
+
+            new Role({
+                name: "moderator"
+            }).save(err => {
+                if (err) {
+                    console.log("error", err);
+                }
+
+                console.log("added 'moderator' to roles collection");
+            });
+
+            new Role({
+                name: "admin"
+            }).save(err => {
+                if (err) {
+                    console.log("error", err);
+                }
+
+                console.log("added 'admin' to roles collection");
+            });
         }
-
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: "moderator"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
-      });
-
-      new Role({
-        name: "admin"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'admin' to roles collection");
-      });
-    }
-  });
+    });
 }
