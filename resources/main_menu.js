@@ -51,6 +51,7 @@ $(function(){
         });
     });
 
+    // Trigger cancel matchmaking on page refresh as well
     $("#cancel-matchmaking").click(function(){
         $("#play").prop('disabled', false);
         $("#welcome-msg").text("Welcome "+player+"!");

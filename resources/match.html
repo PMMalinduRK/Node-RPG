@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col" id="player-col">
                     <div id="player">
-                        <h2>You</h2>
+                        <h2 id="player-name"></h2>
                         <p>HP</p>
                         <div class="hp-bar-container">
                             <div id="player-hp" class="hp-bar"></div>
@@ -32,13 +32,15 @@
                         </div>
                         <img src="images/player.jfif" width="400px"> <br>
                         <!--Add a heavy attack which would break defence but also makes you take twice damage-->
-                        <button id="player_attack">Attack</button>
-                        <button>Defend</button>
+                        <button id="ready">Ready!</button>
+                        <button id="player-attack">Attack</button>
+                        <button id="player-defend">Defend</button>
                     </div>
                 </div>
 
                 <!--Info screen of player moves (screen center)-->
                 <div class="col" id="moves-col">
+                    <h1>00</h1>
                     <p id="join-message-player"></p>
                     <p id="join-message-opponent"></p>
                 </div>
@@ -46,7 +48,7 @@
                 <!--Opponent player's section (right side)-->
                 <div class="col" id="enemy-col">
                     <div id="enemy">
-                        <h2>Enemy</h2>
+                        <h2 id="opponent-name"></h2>
                         <div id="enemy-stat-container">
                             <p>HP</p>
                             <div class="hp-bar-container">
@@ -58,7 +60,7 @@
                                 <div id="enemy-ep" class="ep-bar"></div>
                             </div>
                         </div>
-                        <img src="images/enemy.webp" width="400px">
+                        <img src="images/opponent.jfif" width="400px">
                     </div>
                 </div>
 

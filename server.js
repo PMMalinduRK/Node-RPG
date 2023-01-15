@@ -77,17 +77,20 @@ let player_array = [];
 io.on("connection", (socket) => {
     console.log("Connected to socket");
     // socket.emit("Sent from socket");
+
     socket.on("player waiting", function(player){
         // Database stuff
         console.log(`Player ${player} is waiting in lobby`);
         // socket.emit doesn't work here. io.emit does
         io.emit("Recount lobby");
     });
+
     socket.on("player exited matchmaking", function(player){
         // Remove player from matchmaking list
         console.log(`Player ${player} exited the lobby`);
         io.emit("Recount lobby");
     });
+
     socket.on("match found", function(player){
         // Add players into an array
         player_array.push(player);
@@ -128,6 +131,10 @@ io.on("connection", (socket) => {
             // After the POST, send both players to the match
             io.emit("enter match", player1, player2);
         }
+    });
+
+    socket.on("player ready", function(player){
+        io.emit("ready player", player);
     });
 });
 
