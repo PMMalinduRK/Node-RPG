@@ -44,11 +44,30 @@ $(function() {
         $("#ready").hide();
         $("#player-attack").show();
         $("#player-defend").show();
-        //emit sth
         socket.emit("player ready", player);
     });
 
     socket.on("ready player", function(r_player){
         $("#moves-col").append(`<p>${r_player} is ready</p>`);
+    });
+
+    socket.on("start countdown", function(player1, player2){
+        console.log("Countdown starting");
+        // Validation for emit reciever
+        if(player==player1 || player==player2){
+            console.log("If condition passed");
+            
+            let count = 10;
+            var timer = setInterval(function() {
+                if (count !== 0) {
+                    $('#countdown').text(count -= 1);
+                } else {
+                    clearInterval(timer);
+                }
+            }, 1000);
+            
+        } else {
+            console.log("Something wrong");
+        }
     });
 });

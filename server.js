@@ -70,7 +70,7 @@ db.mongoose
     });
 
 
-// Initialize player count for matchmaking through the server
+// Initialize player array for matchmaking through the server
 let player_array = [];
 
 // Setup the websocket.
@@ -130,11 +130,19 @@ io.on("connection", (socket) => {
 
             // After the POST, send both players to the match
             io.emit("enter match", player1, player2);
+            // Clear player_array for next function
+            player_array = [];
         }
     });
 
     socket.on("player ready", function(player){
         io.emit("ready player", player);
+
+        player_array.push(player);
+        console.log(player_array);
+        if(player_array.length == 2){
+            io.emit("start countdown", player_array[0], player_array[1]);
+        }
     });
 });
 
