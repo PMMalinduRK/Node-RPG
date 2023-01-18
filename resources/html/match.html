@@ -22,47 +22,67 @@
             <!--Player section (left side)-->
             <div class="row">
                 <div class="col" id="player-col">
-                    <div id="player">
+                    <div class="stat-container">
                         <h2 id="player-name"></h2>
                         <p>HP</p>
-                        <div class="hp-bar-container">
-                            <div id="player-hp" class="hp-bar"></div>
+                        <div class="stat-bar-container">
+                            <div id="player-hp" class="stat-bar hp"></div>
                         </div>
                         <p>EP</p>
-                        <div class="ep-bar-container">
-                            <div id="player-ep" class="ep-bar"></div>
+                        <div class="stat-bar-container">
+                            <div id="player-ep" class="stat-bar ep"></div>
                         </div>
-                        <img src="images/player.jfif" width="400px"> <br>
-                        <!--Add a heavy attack which would break defence but also makes you take twice damage-->
-                        <button id="ready">Ready!</button>
-                        <button id="player-attack">Attack</button>
-                        <button id="player-defend">Defend</button>
+                    </div>
+                    
+                    <div class="image-container">
+                        <img src="../images/player.jfif">
                     </div>
                 </div>
 
+
                 <!--Info screen of player moves (screen center)-->
                 <div class="col" id="moves-col">
-                    <h1 id="countdown">00</h1>
-                    <p id="join-message-player"></p>
-                    <p id="join-message-opponent"></p>
+                    <div id="countdown-container">
+                        <div class="center-box">
+                            <h1 id="countdown">00</h1>
+                        </div>
+                    </div>
+
+                    <div id="info-container">
+                        <p id="join-message-player"></p>
+                        <p id="join-message-opponent"></p>
+                    </div>
+
+                    <div id="command-container">
+                        <div class="center-box">
+                            <!--Add a heavy attack which would break defence but also makes you take twice damage-->
+                            <button class="btn btn-outline-success btn-lg" id="ready">Ready!</button>
+                            <button class="btn btn-outline-primary" id="player-attack">Attack <img class="icon" src="../images/icons/gaming.png"></button>
+                            <button class="btn btn-outline-primary" id="player-defend">Defend <img class="icon" src="../images/icons/shield.png"></button> <br>
+                            <button class="btn btn-outline-primary" id="player-heavy">Heavy Attack <img class="icon" src="../images/icons/rpg-game.png"></button>
+                            <button class="btn btn-outline-primary" id="player-item">Use Item <img class="icon" src="../images/icons/chest.png"></button> <br>
+                            <button class="btn btn-outline-primary" id="player-concede">Surrender <img class="icon" src="../images/icons/white-flag.png"></button>
+                        </div>
+                    </div>
                 </div>
+
 
                 <!--Opponent player's section (right side)-->
                 <div class="col" id="enemy-col">
-                    <div id="enemy">
+                    <div class="stat-container">
                         <h2 id="opponent-name"></h2>
-                        <div id="enemy-stat-container">
-                            <p>HP</p>
-                            <div class="hp-bar-container">
-                                <div id="enemy-hp" class="hp-bar"></div>
-                            </div>
-                            <p id="enemy-hp-value">100</p>
-                            <p>EP</p>
-                            <div class="ep-bar-container">
-                                <div id="enemy-ep" class="ep-bar"></div>
-                            </div>
+                        <p>HP</p>
+                        <div class="stat-bar-container">
+                            <div id="enemy-hp" class="stat-bar hp"></div>
                         </div>
-                        <img src="images/opponent.jfif" width="400px">
+                        <p>EP</p>
+                        <div class="stat-bar-container">
+                            <div id="enemy-ep" class="stat-bar ep"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-container">
+                        <img src="../images/opponent.jfif">
                     </div>
                 </div>
 

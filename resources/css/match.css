@@ -1,53 +1,59 @@
-#moves-col{
-    border: 1px dotted gray;
+.row {
+    border: 1px solid red;
+    height: 100%;
 }
-#player{
-    float: left;
-    border: 1px dotted gray;
-    padding: 5px;
+
+.col {
+    border: 1px solid blue;
+    height: 100%;
 }
-#enemy{
-    float: right;
-    border: 1px dotted gray;
-    padding: 5px;
+
+.stat-container {
+    border: 1px solid pink;
+    height: 25%;
 }
-#enemy-stat-container{
-    float: right;
-}
-.hp-bar-container{
-    height: 20px;
-    width: 200px;
+
+.stat-bar-container {
     border: 1px solid black;
-    margin: 10px;
-    padding: 3px;
 }
-.hp-bar{
+
+.stat-bar {
+    border: 2px solid white;
+    height: 25px;
+}
+
+.hp {
     background-color: red;
-    height: 100%;
 }
-#player-hp{
-    width: 100%;
-}
-#enemy-hp{
-    width: 100%;
-}
-#enemy-hp-value{
-    color: red;
-}
-.ep-bar-container{
-    height: 20px;
-    width: 200px;
-    border: 1px solid black;
-    margin: 10px;
-    padding: 3px;
-}
-.ep-bar{
+
+.ep {
     background-color: blue;
+}
+
+.image-container {
+    border: 1px solid green;
+    height: 75%;
+}
+
+img {
     height: 100%;
 }
-#player-ep{
-    width: 100%;
+
+#countdown-container {
+    border: 1px solid black;
+    height: 16%;
 }
-#enemy-ep{
-    width: 100%;
+
+#info-container {
+    border: 1px solid black;
+    height: 42%;
+}
+
+#command-container {
+    border: 1px solid black;
+    height: 42%;
+}
+
+#span-atk {
+    background-image: url('..images/icons/gaming.png');
 }

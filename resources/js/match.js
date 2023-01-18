@@ -3,6 +3,9 @@ var socket = io();
 $(function() {
     $("#player-attack").hide();
     $("#player-defend").hide();
+    $("#player-heavy").hide();
+    $("#player-item").hide();
+    $("#player-concede").hide();
 
     // Getting all cookies and splitting them
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -44,11 +47,14 @@ $(function() {
         $("#ready").hide();
         $("#player-attack").show();
         $("#player-defend").show();
+        $("#player-heavy").show();
+        $("#player-item").show();
+        $("#player-concede").show();
         socket.emit("player ready", player);
     });
 
     socket.on("ready player", function(r_player){
-        $("#moves-col").append(`<p>${r_player} is ready</p>`);
+        $("#info-container").append(`<p>${r_player} is ready</p>`);
     });
 
     socket.on("start countdown", function(player1, player2){
