@@ -30,19 +30,19 @@ app.use(express.static(path.join(__dirname, "resources")));
 
 // Routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/resources/login.html'));
+    res.sendFile(path.join(__dirname, '/resources/html/login.html'));
 });
 app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, '/resources/signup.html'));
+    res.sendFile(path.join(__dirname, '/resources/html/signup.html'));
 });
 app.get('/main', (req, res) => {
-    res.sendFile(path.join(__dirname, '/resources/main_menu.html'));
+    res.sendFile(path.join(__dirname, '/resources/html/main_menu.html'));
 });
 app.get('/lobby', (req, res) => {
-    res.sendFile(path.join(__dirname, '/resources/lobby.html'));
+    res.sendFile(path.join(__dirname, '/resources/html/lobby.html'));
 });
 app.get('/match', (req, res) => {
-    res.sendFile(path.join(__dirname, '/resources/match.html'));
+    res.sendFile(path.join(__dirname, '/resources/html/match.html'));
 });
 
 require('./app/routes/auth.routes')(app);

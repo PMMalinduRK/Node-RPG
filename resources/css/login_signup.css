@@ -1,0 +1,25 @@
+.form {
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: rgba(240, 248, 255, 0.5);
+    width: 500px;
+    padding: 20px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#username {
+    width: 100%;
+}
+
+#btn-login {
+    width: 100%;
+}
+
+p {
+    text-align: center;
+}

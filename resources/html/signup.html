@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login</title>
+        <!--css-->
+        <link rel="stylesheet" href="../css/main.css">
+        <!--js-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+        <script src="../js/signup.js"></script>
+    </head>
+    <body>
+        <div class="container text-center window">
+            <label for="player">Enter your username: </label>
+            <input type="text" name="player" id="username" required>
+            <label for="email">Enter your email: </label>
+            <input type="text" name="email" id="email" required>
+            <label for="password">Enter your password: </label>
+            <input type="password" name="password" id="password" required>
+            <label for="c_password">Confirm your password: </label>
+            <input type="password" name="c_password" id="c_password" required>
+            <button id="btn-signup">Signup</button> <br>
+    
+            <p>Already have an account? <a href="/">Log in</a></p>
+        </div>
+    </body>
+</html>

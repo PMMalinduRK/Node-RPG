@@ -1,0 +1,42 @@
+.col {
+    
+}
+
+#logo {
+    height: 50%;
+}
+
+#nav-panel {
+    height: 75%;
+    transition: height 1s;
+}
+
+.nav-button{
+    height: 15%;
+    width: 40%;
+    font-size: 30px;
+}
+
+#btn-play {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#btn-shop {
+    margin-bottom: 0;
+}
+
+#info-panel {
+    height: 25%;
+    transition: height 1s;
+}
+
+#welcome-msg {
+    font-size: 30px;
+    font-weight: 200;
+}
+
+#player-lfm {
+    font-size: 20px;
+    font-weight: 200;
+}
