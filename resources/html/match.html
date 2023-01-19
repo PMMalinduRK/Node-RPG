@@ -21,39 +21,55 @@
 
             <!--Player section (left side)-->
             <div class="row">
+
                 <div class="col" id="player-col">
+
                     <div class="stat-container">
                         <h2 id="player-name"></h2>
                         <p>HP</p>
                         <div class="stat-bar-container">
-                            <div id="player-hp" class="stat-bar hp"></div>
+                            <div id="player-hp" class="stat-bar hp"><span id="player-hp-value"></span></div>
                         </div>
                         <p>EP</p>
                         <div class="stat-bar-container">
-                            <div id="player-ep" class="stat-bar ep"></div>
+                            <div id="player-ep" class="stat-bar ep"><span id="player-ep-value"></span></div>
                         </div>
                     </div>
-                    
+
                     <div class="image-container">
                         <img src="../images/player.jfif">
                     </div>
+
                 </div>
 
 
                 <!--Info screen of player moves (screen center)-->
                 <div class="col" id="moves-col">
+
                     <div id="countdown-container">
                         <div class="center-box">
-                            <h1 id="countdown">00</h1>
+                            <h1 id="countdown"></h1>
                         </div>
                     </div>
 
                     <div id="info-container">
-                        <p id="join-message-player"></p>
-                        <p id="join-message-opponent"></p>
+                        <div class="center-box">
+                            <!-- These will display only once per match and then disappear -->
+                            <p id="join-message-player"></p>
+                            <p id="join-message-opponent"></p>
+                            <p id="ready-message-player"></p>
+                            <p id="ready-message-opponent"></p>
+                            <!-- These will stay throughout the match and update on each turn -->
+                            <p id="player-action"></p>
+                            <p id="opponent-action"></p>
+                            <p id="player-result"></p>
+                            <p id="opponent-result"></p>
+                            <!-- For extra messages -->
+                            <p id="extra-message"></p>
+                        </div>
                     </div>
 
-                    <div id="command-container">
+                    <div id="action-container">
                         <div class="center-box">
                             <!--Add a heavy attack which would break defence but also makes you take twice damage-->
                             <button class="btn btn-outline-success btn-lg" id="ready">Ready!</button>
@@ -64,26 +80,29 @@
                             <button class="btn btn-outline-primary" id="player-concede">Surrender <img class="icon" src="../images/icons/white-flag.png"></button>
                         </div>
                     </div>
+
                 </div>
 
 
                 <!--Opponent player's section (right side)-->
-                <div class="col" id="enemy-col">
+                <div class="col" id="opponent-col">
+
                     <div class="stat-container">
                         <h2 id="opponent-name"></h2>
                         <p>HP</p>
                         <div class="stat-bar-container">
-                            <div id="enemy-hp" class="stat-bar hp"></div>
+                            <div id="opponent-hp" class="stat-bar hp"><span id="opponent-hp-value"></span></div>
                         </div>
                         <p>EP</p>
                         <div class="stat-bar-container">
-                            <div id="enemy-ep" class="stat-bar ep"></div>
+                            <div id="opponent-ep" class="stat-bar ep"><span id="opponent-ep-value"></span></div>
                         </div>
                     </div>
                     
                     <div class="image-container">
                         <img src="../images/opponent.jfif">
                     </div>
+
                 </div>
 
             </div>

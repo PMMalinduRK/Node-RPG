@@ -75,9 +75,12 @@ let player_array = [];
 
 // Setup the websocket.
 io.on("connection", (socket) => {
-    console.log("Connected to socket");
-    // socket.emit("Sent from socket");
 
+    // General
+    console.log("Connected to socket");
+
+
+    // Matchmaking
     socket.on("player waiting", function(player){
         // Database stuff
         console.log(`Player ${player} is waiting in lobby`);
@@ -135,6 +138,8 @@ io.on("connection", (socket) => {
         }
     });
 
+
+    // In-game
     socket.on("player ready", function(player){
         io.emit("ready player", player);
 
@@ -142,8 +147,11 @@ io.on("connection", (socket) => {
         console.log(player_array);
         if(player_array.length == 2){
             io.emit("start countdown", player_array[0], player_array[1]);
+            player_array = [];
         }
     });
+
+    
 });
 
 
