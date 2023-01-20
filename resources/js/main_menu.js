@@ -123,9 +123,9 @@ $(function(){
                 }
             });
             if(player1 == player){
-                document.cookie = "player2="+encodeURIComponent(player2);
+                document.cookie = "opponent="+encodeURIComponent(player2);
             } else {
-                document.cookie = "player2="+encodeURIComponent(player1);
+                document.cookie = "opponent="+encodeURIComponent(player1);
             }
             // Load match
             window.location.href = "/match";

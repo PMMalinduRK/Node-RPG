@@ -151,7 +151,16 @@ io.on("connection", (socket) => {
         }
     });
 
-    
+    socket.on("player action", function(player, action){
+        io.emit("opponent action", player, action);
+
+        player_array.push(player);
+        console.log(player_array);
+        if(player_array.length == 2){
+            io.emit("actions received", player_array[0], player_array[1]);
+            player_array = [];
+        }
+    });
 });
 
 
