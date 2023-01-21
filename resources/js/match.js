@@ -2,7 +2,7 @@ $(function() {
     var socket = io();
 
     // Variable to end timer manually
-    let stop_timer = false;
+    let timer;
     // Round counter
     let round = 0;
     // End condition
@@ -76,15 +76,15 @@ $(function() {
         console.log("Countdown starting");
         // Validation for emit receiver
         if(player==player1 || player==player2){
-            console.log("If condition passed");
+            console.log("Player confirmed");
 
             $("#extra-message").text("Match Starting...");
 
             // Set the countdown
-            let count = 10;
-            var timer = setInterval(function() {
-                if (count !== 0) {
-                    $('#countdown').text(count -= 1);
+            let count = 3; // CHANGE THIS TO 10!!!!!!!!!!!!!
+            timer = setInterval(function() {
+                if (count != 0) {
+                    $('#countdown').text(count--);
                 } else {
                     clearInterval(timer);
                     // Start this function when the time ends
@@ -145,10 +145,11 @@ $(function() {
 
     // Action outcomes
     socket.on("actions received", function(player1, player2) {
+        console.log("Both player actions received");
         // Validate players
         if((player1 == player || player2 == player) && (player1 == opponent || player2 == opponent)){
             // End timer for the round
-            stop_timer = true;
+            clearInterval(timer);
 
             // Check priorities
             if (player_action > opponent_action) {
@@ -172,7 +173,7 @@ $(function() {
 
             // End match if either of the players have reached 0 hp first
             switch(end) {
-                case 0: /* Continue match */ break;
+                case 0: newRound(); console.log("starting new round"); break;
                 case 1: tie(); break;
                 case 2: playerWin(); break;
                 case 3: opponentWin(); break;
@@ -181,6 +182,7 @@ $(function() {
     });
 
     function startMatch() {
+        console.log("Match started");
         // Hide starting messages
         $("#join-message-player").hide();
         $("#join-message-opponent").hide();
@@ -200,20 +202,19 @@ $(function() {
         $("#player-action").text("Awaiting action");
         // Start round
         round++;
-        matchCountdown();
+        roundCountdown();
     }
     
-    function matchCountdown() {
+    function roundCountdown() {
         let count = 60;
-        var timer = setInterval(function() {
-            if (count !== 0 && !stop_timer) {
-                $('#countdown').text(count -= 1);
-            } else {
-                clearInterval(timer);
-                // Start this function when the time ends
-                
-            }
-        }, 1000); 
+        console.log("Countdown begin");
+        $('#countdown').text(count);
+
+        if (count != 0) {
+            timer = setInterval(function() {
+                $('#countdown').text(count--);
+            }, 1000);
+        }
     }
     
     function disableActions() {
@@ -223,30 +224,43 @@ $(function() {
         $("#player-item").prop('disabled', true);
         $("#player-concede").prop('disabled', true);
     }
+
+    function enableActions() {
+        $("#player-attack").prop('disabled', false);
+        $("#player-defend").prop('disabled', false);
+        $("#player-heavy").prop('disabled', false);
+        $("#player-item").prop('disabled', false);
+        $("#player-concede").prop('disabled', false);
+    }
     
     function newRound() {
+        // Reset player actions
         player_action = 0, opponent_action = 0;
+        console.log("new round starting");
+        roundCountdown();
+        
+        enableActions();
     }
     
     function playerAction(player_action) {
         // Switch for player actions
         switch(player_action) {
-            case 1: playerHeavy(); break;
+            case 1: Heavy("player"); break;
             case 2: attack("player"); break;
-            case 3: playerDefend(); break;
-            case 4: playerUseitem(); break;
-            case 5: playerSurrender(); break;
+            case 3: Defend("player"); break;
+            case 4: Useitem("player"); break;
+            case 5: Surrender("player"); break;
         }
     }
     
     function opponentAction(opponent_action) {
         // Switch for opponent actions
         switch(opponent_action) {
-            case 1: opponentHeavy(); break;
+            case 1: Heavy("opponent"); break;
             case 2: attack("opponent"); break;
-            case 3: opponentDefend(); break;
-            case 4: opponentUseitem(); break;
-            case 5: opponentSurrender(); break;
+            case 3: Defend("opponent"); break;
+            case 4: Useitem("opponent"); break;
+            case 5: Surrender("opponent"); break;
         } 
     }
     
