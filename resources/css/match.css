@@ -1,3 +1,34 @@
+/* Custom fonts */
+@font-face {
+    font-family: EvilEmpire;
+    src: url(../fonts/EvilEmpire-4BBVK.ttf);
+}
+@font-face {
+    font-family: SofiaSans;
+    src: url(../fonts/SofiaSans-VariableFont_wght.ttf);
+}
+
+/* Animations */
+@keyframes fadeOutAnimation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes fadeInOutAnimation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .row {
     border: 1px solid red;
     height: 100%;
@@ -56,4 +87,52 @@ img {
 
 #span-atk {
     background-image: url('..images/icons/gaming.png');
+}
+
+#player-name {
+    font-family: EvilEmpire;
+}
+
+#opponent-name {
+    font-family: EvilEmpire;
+}
+
+#join-message-player {
+    font-family: SofiaSans;
+    font-size: 20px;
+    animation: fadeOutAnimation ease 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+#join-message-opponent {
+    font-family: SofiaSans;
+    font-size: 20px;
+    animation: fadeOutAnimation ease 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+#ready-message-player {
+    font-family: SofiaSans;
+    font-size: 18px;
+    animation: fadeInOutAnimation ease 2s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+}
+
+#ready-message-opponent {
+    font-family: SofiaSans;
+    font-size: 18px;
+    animation: fadeInOutAnimation ease 2s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+}
+
+#player-action {
+    font-family: SofiaSans;
+}
+
+#opponent-action {
+    font-family: SofiaSans;
 }

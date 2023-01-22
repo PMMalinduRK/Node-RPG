@@ -60,6 +60,8 @@ $(function() {
     $("#ready").click(function(){
         $("#ready-message-player").text("You are ready!");
         $(this).prop('disabled', true);
+        // Disable animations
+        $("#ready-message-player").css("animation-iteration-count", "unset");
         
         socket.emit("player ready", player);
     });
@@ -68,6 +70,8 @@ $(function() {
     socket.on("ready player", function(playerX){
         if (playerX == opponent) {
             $("#ready-message-opponent").text(opponent + " is ready!");
+            // Disable animations
+            $("#ready-message-opponent").css("animation-iteration-count", "unset");
         }
     });
 
@@ -156,6 +160,17 @@ $(function() {
         disableActions();
     });
 
+    // Use item
+
+    
+    // Surrender
+    $("#player-concede").click(function(){
+        player_action = 5;
+        socket.emit("player action", player, player_action);
+        // Disable all interactions until next round
+        disableActions();
+    });
+
 
     // Opponent Actions
     socket.on("opponent action", function(playerX, action) {
@@ -179,13 +194,13 @@ $(function() {
                 end = checkEndCondition();
                 // Let other player take action only if the match didn't end
                 if (end == 0) {
-                    setTimeout(opponentAction(opponent_action), 3000);
+                    setTimeout(opponentAction(opponent_action), 1000);
                 }
             } else if (opponent_action > player_action) {
                 opponentAction(opponent_action);
                 end = checkEndCondition();
                 if (end == 0) {
-                    setTimeout(playerAction(player_action), 3000);
+                    setTimeout(playerAction(player_action), 1000);
                 }
             } else {
                 playerAction(player_action);
@@ -240,6 +255,14 @@ $(function() {
                 $('#countdown').text(count--);
             } else {
                 clearInterval(timer);
+                // If one player fails to choose an action, the other player's action should make impact nevertheless
+                if (player_action == 0) {
+                    socket.emit("player action", player, player_action);
+                } else if (opponent_action == 0) {
+                    socket.emit("player action", opponent, opponent_action);
+                } else {
+                    newRound();
+                }
             }
         }, 1000); 
     }
@@ -300,20 +323,24 @@ $(function() {
     function playerAction(player_action) {
         // Switch for player actions
         switch(player_action) {
+            // case 0 is round missed
+            case 0: miss("player");
+                $("#player-action").text("You missed the round!");
+                break;
             case 1: heavy("player");
-                $("#player-action").text(player + " strikes with force!");
+                $("#player-action").text("You strike the enemy with force!");
                 break;
             case 2: attack("player");
-                $("#player-action").text(player + " is attacking!");
+                $("#player-action").text("You are attacking!");
                 break;
             case 3: defend("player");
-                $("#player-action").text(player + " raised their shield!");
+                $("#player-action").text("You raised your shield!");
                 break;
             case 4: useItem("player");
-                $("#player-action").text(player + " used [item_name]!");
+                $("#player-action").text("You used [item_name]!");
                 break;
             case 5: surrender("player");
-                $("#player-action").text(player + " flees!");
+                $("#player-action").text("You ran away!");
                 break;
         }
     }
@@ -321,6 +348,10 @@ $(function() {
     function opponentAction(opponent_action) {
         // Switch for opponent actions
         switch(opponent_action) {
+            // case 0 is round missed
+            case 0: miss("opponent");
+                $("#opponent-action").text(opponent + " missed the round!");
+                break;
             case 1: heavy("opponent");
                 $("#opponent-action").text(opponent + " strikes with force!");
                 break;
@@ -341,6 +372,10 @@ $(function() {
     
     // Actions and results
 
+    function miss(playerX) {
+        // Do nothing
+    }
+
     function heavy(playerX) {
         // Dynamic actor for both the player and opponent
         let actor = playerX;
@@ -357,14 +392,12 @@ $(function() {
             actor_ep = parseInt($("#player-ep-value").text());
             receiver_hp = parseInt($("#opponent-hp-value").text());
             receiver_ep = parseInt($("#opponent-ep-value").text());
-            $("#player-action").text("You performed a heavy attack");
             receiver_action = opponent_action;
         } else {
             actor_hp = parseInt($("#opponent-hp-value").text());
             actor_ep = parseInt($("#opponent-ep-value").text());
             receiver_hp = parseInt($("#player-hp-value").text());
             receiver_ep = parseInt($("#player-ep-value").text());
-            $("#opponent-action").text(opponent + " performed a heavy attack");
             receiver_action = player_action;
         }
 
@@ -446,14 +479,12 @@ $(function() {
             actor_ep = parseInt($("#player-ep-value").text());
             receiver_hp = parseInt($("#opponent-hp-value").text());
             receiver_ep = parseInt($("#opponent-ep-value").text());
-            $("#player-action").text("You performed an attack");
             receiver_action = opponent_action;
         } else {
             actor_hp = parseInt($("#opponent-hp-value").text());
             actor_ep = parseInt($("#opponent-ep-value").text());
             receiver_hp = parseInt($("#player-hp-value").text());
             receiver_ep = parseInt($("#player-ep-value").text());
-            $("#opponent-action").text(opponent + " performed an attack");
             receiver_action = player_action;
         }
 
@@ -504,13 +535,25 @@ $(function() {
     }
 
     function defend(playerX) {
+        // No code needed here
+    }
+
+    function useItem(playerX) {
+        // TODO
+    }
+
+    function surrender(playerX) {
         // Dynamic actor for both the player and opponent
         let actor = playerX;
 
+        actor_hp = parseInt($("#player-hp-value").text());
+
         if (actor == "player") {
-            $("#player-action").text("You are defending");
+            $("#player-action").text("You have surrendered");
+            $("#player-hp-value").text(0);
         } else {
-            $("#opponent-action").text(opponent + " is defending");
+            $("#opponent-action").text(opponent + " has surrendered");
+            $("#opponent-hp-value").text(0);
         }
     }
 
