@@ -127,6 +127,7 @@ $(function() {
             }, 1000);
         } else {
             // Can perform action
+            $("#player-action").text("You are ready for a heavy attack...");
             player_action = 1;
             socket.emit("player action", player, player_action);
             // Disable all interactions until next round
@@ -145,6 +146,7 @@ $(function() {
             }, 1000);
         } else {
             // Can perform action
+            $("#player-action").text("You are ready to attack...");
             player_action = 2;
             socket.emit("player action", player, player_action);
             // Disable all interactions until next round
@@ -154,6 +156,7 @@ $(function() {
 
     // Defend
     $("#player-defend").click(function(){
+        $("#player-action").text("You are ready to block...");
         player_action = 3;
         socket.emit("player action", player, player_action);
         // Disable all interactions until next round
@@ -165,6 +168,7 @@ $(function() {
     
     // Surrender
     $("#player-concede").click(function(){
+        $("#player-action").text("You decided to give up...");
         player_action = 5;
         socket.emit("player action", player, player_action);
         // Disable all interactions until next round
@@ -176,6 +180,7 @@ $(function() {
     socket.on("opponent action", function(playerX, action) {
         if (playerX == opponent) {
             opponent_action = action;
+            $("#opponent-action").text(opponent + " is waiting for you to act");
         }
     });
 
@@ -239,6 +244,7 @@ $(function() {
     
         $("#extra-message").text("");
         $("#player-action").text("Awaiting action");
+        $("#opponent-action").text("Waiting for opponent");
         // Start round
         round++;
         $("#round").text("Round " + round);
@@ -288,7 +294,7 @@ $(function() {
         player_action = 0, opponent_action = 0;
         console.log("new round starting");
         $("#player-action").text("Awaiting action");
-        $("#opponent-action").text("");
+        $("#opponent-action").text("Waiting for opponent");
         $("#player-result").text("");
         $("#opponent-result").text("");
 
