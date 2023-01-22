@@ -97,11 +97,6 @@ $(function() {
         }
     });
 
-    let player_hp = parseInt($("#player-hp-value").text());
-    let player_ep = parseInt($("#player-ep-value").text());
-    let opponent_hp = parseInt($("#opponent-hp-value").text());
-    let opponent_ep = parseInt($("#opponent-ep-value").text());
-
     // Player Actions
         // Action 1: heavy attack
         // Action 2: attack
@@ -116,6 +111,24 @@ $(function() {
         // Heavy attack
 
     let player_action = 0, opponent_action = 0;
+
+    // Heavy Attack
+    $("#player-heavy").click(function(){
+        let player_ep = $("#player-ep-value").text();
+        if (player_ep < 15) {
+            // Cannot perform action
+            $("#player-action").text("Not enough energy!");
+            setTimeout(function(){
+                $("#player-action").text("Awaiting action");
+            }, 1000);
+        } else {
+            // Can perform action
+            player_action = 1;
+            socket.emit("player action", player, player_action);
+            // Disable all interactions until next round
+            disableActions();
+        }
+    });
 
     // Attack
     $("#player-attack").click(function(){
@@ -133,6 +146,14 @@ $(function() {
             // Disable all interactions until next round
             disableActions();
         }
+    });
+
+    // Defend
+    $("#player-defend").click(function(){
+        player_action = 3;
+        socket.emit("player action", player, player_action);
+        // Disable all interactions until next round
+        disableActions();
     });
 
 
@@ -180,7 +201,7 @@ $(function() {
                     case 2: playerWin(); break;
                     case 3: opponentWin(); break;
                 }
-            }, 3000);
+            }, 5000);
         }
     });
 
@@ -205,6 +226,7 @@ $(function() {
         $("#player-action").text("Awaiting action");
         // Start round
         round++;
+        $("#round").text("Round " + round);
         roundCountdown();
     }
     
@@ -213,11 +235,13 @@ $(function() {
         console.log("Countdown begin");
         $('#countdown').text(count);
 
-        if (count != 0) {
-            timer = setInterval(function() {
+        timer = setInterval(function() {
+            if (count != 0) {
                 $('#countdown').text(count--);
-            }, 1000);
-        }
+            } else {
+                clearInterval(timer);
+            }
+        }, 1000); 
     }
     
     function disableActions() {
@@ -244,26 +268,51 @@ $(function() {
         $("#opponent-action").text("");
         $("#player-result").text("");
         $("#opponent-result").text("");
+
+        // Replenish some energy
+        replenishEnergy();
         roundCountdown();
         enableActions();
+
+        // Update round number
+        round++;
+        $("#round").text("Round " + round);
+    }
+
+    function replenishEnergy() {
+        let player_ep = parseInt($("#player-ep-value").text());
+        if (player_ep <= 95) {
+            let player_ep_value = player_ep + 5;
+            let player_ep_percent = player_ep_value + "%";
+            $("#player-ep").css("width", player_ep_percent);
+            $("#player-ep-value").text(player_ep_value);
+        }
+
+        let opponent_ep = parseInt($("#opponent-ep-value").text());
+        if (opponent_ep <= 95) {
+            let opponent_ep_value = opponent_ep + 5;
+            let opponent_ep_percent = opponent_ep_value + "%";
+            $("#opponent-ep").css("width", opponent_ep_percent);
+            $("#opponent-ep-value").text(opponent_ep_value);
+        }
     }
     
     function playerAction(player_action) {
         // Switch for player actions
         switch(player_action) {
-            case 1: Heavy("player");
+            case 1: heavy("player");
                 $("#player-action").text(player + " strikes with force!");
                 break;
             case 2: attack("player");
                 $("#player-action").text(player + " is attacking!");
                 break;
-            case 3: Defend("player");
+            case 3: defend("player");
                 $("#player-action").text(player + " raised their shield!");
                 break;
-            case 4: Useitem("player");
+            case 4: useItem("player");
                 $("#player-action").text(player + " used [item_name]!");
                 break;
-            case 5: Surrender("player");
+            case 5: surrender("player");
                 $("#player-action").text(player + " flees!");
                 break;
         }
@@ -272,25 +321,114 @@ $(function() {
     function opponentAction(opponent_action) {
         // Switch for opponent actions
         switch(opponent_action) {
-            case 1: Heavy("opponent");
+            case 1: heavy("opponent");
                 $("#opponent-action").text(opponent + " strikes with force!");
                 break;
             case 2: attack("opponent");
                 $("#opponent-action").text(opponent + " is attacking!");
                 break;
-            case 3: Defend("opponent");
+            case 3: defend("opponent");
                 $("#opponent-action").text(opponent + " raised their shield!");
                 break;
-            case 4: Useitem("opponent");
+            case 4: useItem("opponent");
                 $("#opponent-action").text(opponent + " used [item_name]!");
                 break;
-            case 5: Surrender("opponent");
+            case 5: surrender("opponent");
                 $("#opponent-action").text(opponent + " flees!");
                 break;
         } 
     }
     
     // Actions and results
+
+    function heavy(playerX) {
+        // Dynamic actor for both the player and opponent
+        let actor = playerX;
+        // Initialize variables
+        let actor_hp;
+        let actor_ep;
+        let receiver_hp;
+        let receiver_ep;
+        // Take opponent action into account before calculating output
+        let receiver_action;
+
+        if (actor == "player") {
+            actor_hp = parseInt($("#player-hp-value").text());
+            actor_ep = parseInt($("#player-ep-value").text());
+            receiver_hp = parseInt($("#opponent-hp-value").text());
+            receiver_ep = parseInt($("#opponent-ep-value").text());
+            $("#player-action").text("You performed a heavy attack");
+            receiver_action = opponent_action;
+        } else {
+            actor_hp = parseInt($("#opponent-hp-value").text());
+            actor_ep = parseInt($("#opponent-ep-value").text());
+            receiver_hp = parseInt($("#player-hp-value").text());
+            receiver_ep = parseInt($("#player-ep-value").text());
+            $("#opponent-action").text(opponent + " performed a heavy attack");
+            receiver_action = player_action;
+        }
+
+        // Update actor ep
+        let actor_ep_value = actor_ep - 15;
+        // Initialize actor/receiver hp
+        let actor_hp_value;
+        let receiver_hp_value;
+
+        // Attack interrupted
+        if (receiver_action == 2) {
+            // Update actor hp
+            actor_hp_value = actor_hp - 15;
+            if (actor == "player") {
+                $("#player-result").text("You got staggered for 15 damage!");
+            } else {
+                $("#opponent-result").text(opponent + " got staggered for 15 damage!");
+            }
+        // Block bypassed
+        } else if (receiver_action == 3){
+            // Update receiver hp
+            receiver_hp_value = receiver_hp - 5;
+            if (actor == "player") {
+                $("#player-result").text("You broke the opponent's block for 5 damage!");
+            } else {
+                $("#opponent-result").text(opponent + " broke your block for 5 damage!");
+            }
+        // Full swing
+        } else {
+            // Update receiver hp
+            receiver_hp_value = receiver_hp - 20;
+            if (actor == "player") {
+                $("#player-result").text("You did a full swing at the opponent for 20 damage!");
+            } else {
+                $("#opponent-result").text(opponent + " did a full swing at you for 20 damage!");
+            }
+        }
+        
+        // Prevent hp from going below zero
+        if (receiver_hp_value < 0) {
+            receiver_hp_value = 0;
+        }
+        // Create the string required to update the css "width" property
+        let receiver_hp_percent = receiver_hp_value + "%";
+        let actor_hp_percent = actor_hp_value + "%";
+        let actor_ep_percent = actor_ep_value + "%";
+
+        // Change css property
+        if (actor == "player") {
+            $("#opponent-hp").css("width", receiver_hp_percent);
+            $("#opponent-hp-value").text(receiver_hp_value);
+            $("#player-hp").css("width", actor_hp_percent);
+            $("#player-hp-value").text(actor_hp_value);
+            $("#player-ep").css("width", actor_ep_percent);
+            $("#player-ep-value").text(actor_ep_value);
+        } else {
+            $("#player-hp").css("width", receiver_hp_percent);
+            $("#player-hp-value").text(receiver_hp_value);
+            $("#opponent-hp").css("width", actor_hp_percent);
+            $("#opponent-hp-value").text(actor_hp_value);
+            $("#opponent-ep").css("width", actor_ep_percent);
+            $("#opponent-ep-value").text(actor_ep_value);
+        }
+    }
 
     function attack(playerX) {
         // Dynamic actor for both the player and opponent
@@ -308,12 +446,14 @@ $(function() {
             actor_ep = parseInt($("#player-ep-value").text());
             receiver_hp = parseInt($("#opponent-hp-value").text());
             receiver_ep = parseInt($("#opponent-ep-value").text());
+            $("#player-action").text("You performed an attack");
             receiver_action = opponent_action;
         } else {
             actor_hp = parseInt($("#opponent-hp-value").text());
             actor_ep = parseInt($("#opponent-ep-value").text());
             receiver_hp = parseInt($("#player-hp-value").text());
             receiver_ep = parseInt($("#player-ep-value").text());
+            $("#opponent-action").text(opponent + " performed an attack");
             receiver_action = player_action;
         }
 
@@ -341,7 +481,6 @@ $(function() {
             }
         }
         
-        
         // Prevent hp from going below zero
         if (receiver_hp_value < 0) {
             receiver_hp_value = 0;
@@ -356,8 +495,6 @@ $(function() {
             $("#opponent-hp-value").text(receiver_hp_value);
             $("#player-ep").css("width", actor_ep_percent);
             $("#player-ep-value").text(actor_ep_value);
-            // result
-            $("#opponent")
         } else {
             $("#player-hp").css("width", receiver_hp_percent);
             $("#player-hp-value").text(receiver_hp_value);
@@ -366,6 +503,16 @@ $(function() {
         }
     }
 
+    function defend(playerX) {
+        // Dynamic actor for both the player and opponent
+        let actor = playerX;
+
+        if (actor == "player") {
+            $("#player-action").text("You are defending");
+        } else {
+            $("#opponent-action").text(opponent + " is defending");
+        }
+    }
 
 
 
