@@ -119,6 +119,7 @@ $(function() {
 
     // Attack
     $("#player-attack").click(function(){
+        let player_ep = $("#player-ep-value").text();
         if (player_ep < 10) {
             // Cannot perform action
             $("#player-action").text("Not enough energy!");
@@ -172,12 +173,14 @@ $(function() {
             }
 
             // End match if either of the players have reached 0 hp first
-            switch(end) {
-                case 0: newRound(); console.log("starting new round"); break;
-                case 1: tie(); break;
-                case 2: playerWin(); break;
-                case 3: opponentWin(); break;
-            }
+            setTimeout(function(){
+                switch(end) {
+                    case 0: newRound(); console.log("starting new round"); break;
+                    case 1: tie(); break;
+                    case 2: playerWin(); break;
+                    case 3: opponentWin(); break;
+                }
+            }, 3000);
         }
     });
 
@@ -237,74 +240,57 @@ $(function() {
         // Reset player actions
         player_action = 0, opponent_action = 0;
         console.log("new round starting");
+        $("#player-action").text("Awaiting action");
+        $("#opponent-action").text("");
+        $("#player-result").text("");
+        $("#opponent-result").text("");
         roundCountdown();
-        
         enableActions();
     }
     
     function playerAction(player_action) {
         // Switch for player actions
         switch(player_action) {
-            case 1: Heavy("player"); break;
-            case 2: attack("player"); break;
-            case 3: Defend("player"); break;
-            case 4: Useitem("player"); break;
-            case 5: Surrender("player"); break;
+            case 1: Heavy("player");
+                $("#player-action").text(player + " strikes with force!");
+                break;
+            case 2: attack("player");
+                $("#player-action").text(player + " is attacking!");
+                break;
+            case 3: Defend("player");
+                $("#player-action").text(player + " raised their shield!");
+                break;
+            case 4: Useitem("player");
+                $("#player-action").text(player + " used [item_name]!");
+                break;
+            case 5: Surrender("player");
+                $("#player-action").text(player + " flees!");
+                break;
         }
     }
     
     function opponentAction(opponent_action) {
         // Switch for opponent actions
         switch(opponent_action) {
-            case 1: Heavy("opponent"); break;
-            case 2: attack("opponent"); break;
-            case 3: Defend("opponent"); break;
-            case 4: Useitem("opponent"); break;
-            case 5: Surrender("opponent"); break;
+            case 1: Heavy("opponent");
+                $("#opponent-action").text(opponent + " strikes with force!");
+                break;
+            case 2: attack("opponent");
+                $("#opponent-action").text(opponent + " is attacking!");
+                break;
+            case 3: Defend("opponent");
+                $("#opponent-action").text(opponent + " raised their shield!");
+                break;
+            case 4: Useitem("opponent");
+                $("#opponent-action").text(opponent + " used [item_name]!");
+                break;
+            case 5: Surrender("opponent");
+                $("#opponent-action").text(opponent + " flees!");
+                break;
         } 
     }
     
     // Actions and results
-    
-    /* function playerAttack() {
-        // Update player ep
-        let player_ep_value = parseInt(player_ep) - 10;
-        // Update opponent hp
-        let opponent_hp_value = parseInt(opponent_hp) - 10;
-        // Prevent hp from going below zero
-        if (opponent_hp_value < 0) {
-            opponent_hp_value = 0;
-        }
-        // Create the string required to update the css "width" property
-        let opponent_hp_percent = opponent_hp_value + "%";
-        let player_ep_percent = player_ep_value + "%";
-        // Change css property
-        $("#opponent-hp").css("width", opponent_hp_percent);
-        $("#opponent-hp-value").text(opponent_hp_value);
-        $("#player-ep").css("width", player_ep_percent);
-        $("#player-ep-value").text(player_ep_value);
-    
-        console.log(opponent_hp, opponent_hp_value, opponent_hp_percent);
-    }
-    
-    function opponentAttack() {
-        // Update opponent ep
-        let opponent_ep_value = parseInt(opponent_ep) - 10;
-        // Update player hp
-        let player_hp_value = parseInt(player_hp) - 10;
-        // Prevent hp from going below zero
-        if (player_hp_value < 0) {
-            player_hp_value = 0;
-        }
-        // Create the string required to update the css "width" property
-        let player_hp_percent = player_hp_value + "%";
-        let opponent_ep_percent = opponent_ep_value + "%";
-        // Change css property
-        $("#player-hp").css("width", player_hp_percent);
-        $("#player-hp-value").text(player_hp_value);
-        $("#opponent-ep").css("width", opponent_ep_percent);
-        $("#opponent-ep-value").text(opponent_ep_value);
-    } */
 
     function attack(playerX) {
         // Dynamic actor for both the player and opponent
@@ -314,23 +300,48 @@ $(function() {
         let actor_ep;
         let receiver_hp;
         let receiver_ep;
+        // Take opponent action into account before calculating output
+        let receiver_action;
 
         if (actor == "player") {
-            actor_hp = player_hp;
-            actor_ep = player_ep;
-            receiver_hp = opponent_hp;
-            receiver_ep = opponent_ep;
+            actor_hp = parseInt($("#player-hp-value").text());
+            actor_ep = parseInt($("#player-ep-value").text());
+            receiver_hp = parseInt($("#opponent-hp-value").text());
+            receiver_ep = parseInt($("#opponent-ep-value").text());
+            receiver_action = opponent_action;
         } else {
-            receiver_hp = player_hp;
-            receiver_ep = player_ep;
-            actor_hp = opponent_hp;
-            actor_ep = opponent_ep;
+            actor_hp = parseInt($("#opponent-hp-value").text());
+            actor_ep = parseInt($("#opponent-ep-value").text());
+            receiver_hp = parseInt($("#player-hp-value").text());
+            receiver_ep = parseInt($("#player-ep-value").text());
+            receiver_action = player_action;
         }
-        
+
         // Update actor ep
         let actor_ep_value = actor_ep - 10;
-        // Update receiver hp
-        let receiver_hp_value = receiver_hp - 10;
+        // Initialize receiver hp
+        let receiver_hp_value;
+
+        // Attack blocked
+        if (receiver_action == 3) {
+            // Update receiver hp
+            receiver_hp_value = receiver_hp - 0;
+            if (actor == "player") {
+                $("#opponent-result").text(opponent + " blocked the attack!");
+            } else {
+                $("#player-result").text("You blocked the attack!");
+            }
+        } else {
+            // Update receiver hp
+            receiver_hp_value = receiver_hp - 10;
+            if (actor == "player") {
+                $("#opponent-result").text(opponent + " received 10 damage!");
+            } else {
+                $("#player-result").text("You received 10 damage!");
+            }
+        }
+        
+        
         // Prevent hp from going below zero
         if (receiver_hp_value < 0) {
             receiver_hp_value = 0;
@@ -345,6 +356,8 @@ $(function() {
             $("#opponent-hp-value").text(receiver_hp_value);
             $("#player-ep").css("width", actor_ep_percent);
             $("#player-ep-value").text(actor_ep_value);
+            // result
+            $("#opponent")
         } else {
             $("#player-hp").css("width", receiver_hp_percent);
             $("#player-hp-value").text(receiver_hp_value);
@@ -358,6 +371,8 @@ $(function() {
 
 
     function checkEndCondition() {
+        let player_hp = $("#player-hp-value").text();
+        let opponent_hp = $("#opponent-hp-value").text();
         // Return victor after checking a few different end-game conditions
         if (opponent_hp != 0 && player_hp != 0) {
             // Continue match
