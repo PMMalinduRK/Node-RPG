@@ -29,10 +29,8 @@ $(function(){
     // If the player is undefined, send to redirect page
     if (player == undefined) {
         window.location.href = "/redirect";
-    }
-    // Clear any opponent names from previous matches
-    if (opponent != undefined) {
-        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    } else {
+        document.getElementsByTagName("html")[0].style.visibility = "visible";
     }
 
     $("#welcome-msg").text("Welcome "+player+"!");

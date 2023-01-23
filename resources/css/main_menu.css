@@ -1,3 +1,8 @@
+/* Hide page before checking for user authority */
+html {
+    visibility:hidden;
+}
+
 #logo {
     height: 50%;
 }

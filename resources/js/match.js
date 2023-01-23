@@ -206,13 +206,13 @@ $(function() {
                 end = checkEndCondition();
                 // Let other player take action only if the match didn't end
                 if (end == 0) {
-                    setTimeout(opponentAction(opponent_action), 1000);
+                    setTimeout(opponentAction(opponent_action), 2000);
                 }
             } else if (opponent_action > player_action) {
                 opponentAction(opponent_action);
                 end = checkEndCondition();
                 if (end == 0) {
-                    setTimeout(playerAction(player_action), 1000);
+                    setTimeout(playerAction(player_action), 2000);
                 }
             } else {
                 playerAction(player_action);
@@ -422,8 +422,8 @@ $(function() {
 
         // Attack interrupted
         if (receiver_action == 2) {
-            // Update actor hp
-            actor_hp_value = actor_hp - 15;
+            // Update actor hp (Stagger damage is a total of 15, with 5 from receivers logic and 10 from actor's logic)
+            actor_hp_value = actor_hp - 5;
             if (actor == "player") {
                 $("#player-result").text("You got staggered for 15 damage!");
             } else {
@@ -599,6 +599,9 @@ $(function() {
 
     function tie() {
         $("#extra-message").text("Match tied!");
+        // Clear opponent cookie
+        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
         let count = 10;
         var timer = setInterval(function() {
             if (count !== 0) {
@@ -614,6 +617,9 @@ $(function() {
 
     function playerWin() {
         $("#extra-message").text("You win!");
+        // Clear opponent cookie
+        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
         let count = 10;
         var timer = setInterval(function() {
             if (count !== 0) {
@@ -629,6 +635,9 @@ $(function() {
 
     function opponentWin() {
         $("#extra-message").text("You lose!");
+        // Clear opponent cookie
+        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
         let count = 10;
         var timer = setInterval(function() {
             if (count !== 0) {
