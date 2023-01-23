@@ -46,6 +46,9 @@ app.get('/lobby', (req, res) => {
 app.get('/match', (req, res) => {
     res.sendFile(path.join(__dirname, '/resources/html/match.html'));
 });
+app.get('/redirect', (req, res) => {
+    res.sendFile(path.join(__dirname, '/resources/html/redirect.html'));
+});
 
 require('./app/routes/auth.routes')(app);
 require('./app/routes/user.routes')(app);

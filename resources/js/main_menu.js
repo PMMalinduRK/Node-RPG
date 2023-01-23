@@ -19,14 +19,20 @@ $(function(){
     for(let i = 0; i <ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') {
-        c = c.substring(1);
+            c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
-        player = c.substring(name.length, c.length);
+            player = c.substring(name.length, c.length);
         }
     }
+
+    // If the player is undefined, send to redirect page
+    if (player == undefined) {
+        window.location.href = "/redirect";
+    }
+
     $("#welcome-msg").text("Welcome "+player+"!");
-    //
+
 
     $("#btn-logout").click(function() {
         // Expire player cookie by giving it a past expiry date
