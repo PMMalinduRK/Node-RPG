@@ -428,9 +428,9 @@ $(function() {
             // Update actor hp (Stagger damage is a total of 15, with 5 from receivers logic and 10 from actor's logic)
             actor_hp_value = actor_hp - 5;
             if (actor == "player") {
-                $("#player-result").text("You got staggered for 15 damage!");
+                $("#opponent-result").text("You got staggered for 15 damage!");
             } else {
-                $("#opponent-result").text(opponent + " got staggered for 15 damage!");
+                $("#player-result").text(opponent + " got staggered for 15 damage!");
             }
         // Block bypassed
         } else if (receiver_action == 3){
