@@ -51,6 +51,13 @@ $(function() {
         }
     }
 
+    // If the player or opponent is undefined, send to redirect page
+    if (player != undefined && opponent != undefined) {
+        document.getElementsByTagName("html")[0].style.visibility = "visible";
+    } else {
+        window.location.href = "/redirect";
+    }
+
     // Update UI with opponent info
     $("#join-message-opponent").text(opponent+" has joined the game");
     $("#opponent-name").text(opponent);

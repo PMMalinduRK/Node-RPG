@@ -30,6 +30,10 @@ $(function(){
     if (player == undefined) {
         window.location.href = "/redirect";
     }
+    // Clear any opponent names from previous matches
+    if (opponent != undefined) {
+        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
 
     $("#welcome-msg").text("Welcome "+player+"!");
 

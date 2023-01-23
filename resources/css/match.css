@@ -29,6 +29,11 @@
     }
 }
 
+/* Hide page before checking for user authority */
+html {
+    visibility:hidden;
+}
+
 .row {
     border: 1px solid red;
     height: 100%;
