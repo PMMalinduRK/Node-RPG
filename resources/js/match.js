@@ -84,6 +84,7 @@ $(function() {
 
     // Match start countdown
     socket.on("start countdown", function(player1, player2){
+        $("#countdown-box").css("width", "100%");
         console.log("Countdown starting");
         // Validation for emit receiver
         if(player==player1 || player==player2){
@@ -98,6 +99,8 @@ $(function() {
                     $('#countdown').text(count--);
                 } else {
                     clearInterval(timer);
+                    $("#moves-col").css("border-left", "2px groove black");
+                    $("#moves-col").css("border-right", "2px groove black");
                     // Start this function when the time ends
                     startMatch();
                 }

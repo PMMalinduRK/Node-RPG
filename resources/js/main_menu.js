@@ -122,6 +122,11 @@ $(function(){
     });
 
     socket.on("enter match", function(player1, player2){
+        $("#players-lfm").hide();
+        $("#welcome-msg").text("Match found!");
+        setTimeout(function(){
+            $("#welcome-msg").text("Connecting to match...");
+        }, 2000);
         // Send only the relevent two players into the match
         if(player1 == player || player2 == player){
             console.log(player1 + " vs " + player2);
@@ -144,7 +149,9 @@ $(function(){
                 document.cookie = "opponent="+encodeURIComponent(player1);
             }
             // Load match
-            window.location.href = "/match";
+            setTimeout(function(){
+                window.location.href = "/match";
+            }, 3000);
         }
     })
 });

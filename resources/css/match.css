@@ -35,17 +35,14 @@ html {
 }
 
 .row {
-    border: 1px solid red;
     height: 100%;
 }
 
 .col {
-    border: 1px solid blue;
     height: 100%;
 }
 
 .stat-container {
-    border: 1px solid pink;
     height: 25%;
 }
 
@@ -67,31 +64,39 @@ html {
 }
 
 .image-container {
-    border: 1px solid green;
     height: 75%;
+    padding: 20px;
 }
 
 img {
     height: 100%;
 }
 
+#moves-col {
+    transition: border 3s;
+}
+
 #countdown-container {
-    border: 1px solid black;
     height: 16%;
 }
 
+#countdown-box {
+    height: 100%;
+    width: 0px;
+    transition: width 3s;
+    border-bottom: 3px solid black;
+}
+
 #info-container {
-    border: 1px solid black;
     height: 42%;
 }
 
 #action-container {
-    border: 1px solid black;
     height: 42%;
 }
 
-#span-atk {
-    background-image: url('..images/icons/gaming.png');
+.btn {
+    margin: 3px;
 }
 
 #player-name {
@@ -140,4 +145,14 @@ img {
 
 #opponent-action {
     font-family: SofiaSans;
+}
+
+#player-result {
+    font-family: sans-serif;
+    color: green;
+}
+
+#opponent-result {
+    font-family: sans-serif;
+    color: red;
 }
