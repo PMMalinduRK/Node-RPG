@@ -6,15 +6,17 @@ const server = http.createServer(app);
 const path = require('path');
 const { Server } = require("socket.io");
 const io = new Server(server);
-
+const localUrl = "http://localhost:3000";
+const pubUrl = "https://node-rpg.onrender.com";
+const corsOrigin = "http://localhost:3001";
 
 // This is for making requests through the server
 let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-let url = 'http://localhost:3000/api/match/';
+let url = pubUrl + '/api/match/';
 
 
 var corsOptions = {
-    origin: "http://localhost:3001"
+    origin: pubUrl
 };
 
 app.use(cors(corsOptions));

@@ -1,5 +1,7 @@
 // TODO put all ajax calls in separate functions
 $(function(){
+    const localUrl = "http://localhost:3000";
+    const pubUrl = "https://node-rpg.onrender.com";
     // Initialize variables for later use
     let player_id;
     let lobby_message;
@@ -39,7 +41,7 @@ $(function(){
         // Add player to the waiting lobby
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/api/lobby",
+            url: pubUrl + "/api/lobby",
             data: JSON.stringify({ "username": player }),
             contentType: "application/json",
             success: function (result) {
@@ -66,7 +68,7 @@ $(function(){
         // Remove player from the waiting lobby
         $.ajax({
             type: "DELETE",
-            url: "http://localhost:3000/api/lobby/"+player_id,
+            url: pubUrl + "/api/lobby/"+player_id,
             success: function (result) {
                 // console.log(result);
                 // Show the number of players in lobby
@@ -83,7 +85,7 @@ $(function(){
         // Show the number of players in lobby
         $.ajax({
             type: "GET",
-            url: "http://localhost:3000/api/lobby/count/players",
+            url: pubUrl + "/api/lobby/count/players",
             contentType : 'application/json',
             dataType : 'json',
             success: function (result) {
@@ -112,7 +114,7 @@ $(function(){
             // Remove player from the waiting lobby
             $.ajax({
                 type: "DELETE",
-                url: "http://localhost:3000/api/lobby/"+player_id,
+                url: pubUrl + "/api/lobby/"+player_id,
                 success: function (result) {
                     // console.log(result);
                     // Show the number of players in lobby

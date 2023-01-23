@@ -1,5 +1,8 @@
 $(function(){
 
+    const localUrl = "http://localhost:3000";
+    const pubUrl = "https://node-rpg.onrender.com";
+
     $("#btn-login").click(function(){
         let username = $("#username").val();
         let password = $("#password").val();
@@ -7,7 +10,7 @@ $(function(){
         // POST request to the api
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/api/auth/signin",
+            url: pubUrl + "/api/auth/signin",
             data: JSON.stringify({ "username": username, "password" : password }),
             contentType: "application/json",
             success: function (result) {
@@ -15,7 +18,7 @@ $(function(){
                 // GET the response and set it to the header of user api
                 $.ajax({
                     type : "GET", 
-                    url : "http://localhost:3000/api/test/user", 
+                    url : pubUrl + "/api/test/user", 
                     beforeSend: function(xhr){xhr.setRequestHeader('x-access-token', result.accessToken);},
                     success : function(result) { 
                         console.log(result);

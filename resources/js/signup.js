@@ -1,4 +1,7 @@
 $(function(){
+    const localUrl = "http://localhost:3000";
+    const pubUrl = "https://node-rpg.onrender.com";
+
     $("#btn-signup").click(function(){
   
         let username = $("#username").val();
@@ -8,7 +11,7 @@ $(function(){
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/api/auth/signup",
+            url: pubUrl + "/api/auth/signup",
             data: JSON.stringify({ "username": username, "email": email, "password" : password }),
             contentType: "application/json",
             success: function (result) {
