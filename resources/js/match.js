@@ -7,6 +7,19 @@ $(function() {
     let round = 0;
     // End condition
     let end = 0;
+    // Player items
+    let player_items = [];
+    let selected_item;
+
+    // Item catalogue
+    let items = [
+        "heal", // heal for 10HP
+        "empower", // increase attack power by 5 for 2 rounds
+        "sap", // drain 20EP from opponent
+        "fortify", // can't get staggered for 3 rounds
+    ];
+
+    let item_array_length = items.length;
 
     // Hide action buttons before match start
     $("#player-attack").hide();
@@ -115,11 +128,11 @@ $(function() {
         // Action 1: heavy attack
         // Action 2: attack
         // Action 3: defend
-        // Action 4: use item
-        // Action 5: surrender
+        // Action 4: surrender
+        // Action 5+: use item
     // Action priority
-        // Surrender
         // Use item
+        // Surrender
         // Defend
         // Attack
         // Heavy attack
@@ -173,18 +186,33 @@ $(function() {
         disableActions();
     });
 
-    // Use item
-
-    
     // Surrender
     $("#player-concede").click(function(){
         $("#player-action").text("You decided to give up...");
-        player_action = 5;
+        player_action = 4;
         socket.emit("player action", player, player_action);
         // Disable all interactions until next round
         disableActions();
     });
-
+    
+    // Use item
+        // 5: heal
+        // 6: empower
+        // 7: sap
+        // 8: fortify
+    function selectItem() {
+        $("#player-action").text("You are ready to use the item...");
+        selected_item = $(this).text;
+        switch(selected_item) {
+            case "heal": player_action = 5; break;
+            case "empower": player_action = 6; break;
+            case "sap": player_action = 7; break;
+            case "fortify": player_action = 8; break;
+        }
+        socket.emit("player action", player, player_action);
+        // Disable all interactions until next round
+        disableActions();
+    }
 
     // Opponent Actions
     socket.on("opponent action", function(playerX, action) {
@@ -308,13 +336,23 @@ $(function() {
         $("#player-result").text("");
         $("#opponent-result").text("");
 
-        // Replenish some energy
-        replenishEnergy();
-        roundCountdown();
-        enableActions();
-
         // Update round number
         round++;
+        // Give item to players each 3 rounds
+        if (round % 3 == 0) {
+            $("#extra-message").text("Drawing new item!");
+            getItem();
+            setTimeout(function(){
+                $("#extra-message").text("");
+                replenishEnergy();
+                roundCountdown();
+                enableActions();
+            }, 6000);
+        } else {
+            replenishEnergy();
+            roundCountdown();
+            enableActions();
+        }
         $("#round").text("Round " + round);
     }
 
@@ -335,6 +373,22 @@ $(function() {
             $("#opponent-ep-value").text(opponent_ep_value);
         }
     }
+
+    function getItem() {
+        // Generate random integer within array size
+        let x = Math.floor(Math.random() * item_array_length);
+        // Add random item to player array
+        let new_item = items[x];
+        player_items.push(new_item);
+
+        // Append to html
+        $("#item-dropdown").append("<li><a class='dropdown-item' onclick=selectItem()>"+ new_item +"</a></li>");
+
+        setTimeout(function(){
+            $("#extra-message").text("You got " + new_item + "!");
+        }, 3000);
+    }
+
     
     function playerAction(player_action) {
         // Switch for player actions
@@ -352,11 +406,20 @@ $(function() {
             case 3: defend("player");
                 $("#player-action").text("You raised your shield!");
                 break;
-            case 4: useItem("player");
-                $("#player-action").text("You used [item_name]!");
-                break;
-            case 5: surrender("player");
+            case 4: surrender("player");
                 $("#player-action").text("You ran away!");
+                break;
+            case 5: heal("player");
+                $("#player-action").text("You used heal!");
+                break;
+            case 6: empower("player");
+                $("#player-action").text("You used empower!");
+                break;
+            case 7: sap("player");
+                $("#player-action").text("You used sap!");
+                break;
+            case 8: fortify("player");
+                $("#player-action").text("You used fortify!");
                 break;
         }
     }
@@ -377,11 +440,20 @@ $(function() {
             case 3: defend("opponent");
                 $("#opponent-action").text(opponent + " raised their shield!");
                 break;
-            case 4: useItem("opponent");
-                $("#opponent-action").text(opponent + " used [item_name]!");
-                break;
-            case 5: surrender("opponent");
+            case 4: surrender("opponent");
                 $("#opponent-action").text(opponent + " flees!");
+                break;
+            case 5: heal("opponent");
+                $("#opponent-action").text(opponent + " used heal!");
+                break;
+            case 6: empower("opponent");
+                $("#opponent-action").text(opponent + " used empower!");
+                break;
+            case 7: sap("opponent");
+                $("#opponent-action").text(opponent + " used sap!");
+                break;
+            case 8: fortify("opponent");
+                $("#opponent-action").text(opponent + " used fortify!");
                 break;
         } 
     }
@@ -524,6 +596,7 @@ $(function() {
             if (actor == "player") {
                 $("#opponent-result").text(opponent + " received 10 damage!");
             } else {
+                // Change this to opponent-result, but also keep in mind that the heavy attack also modifies this value
                 $("#player-result").text("You received 10 damage!");
             }
         }
@@ -554,16 +627,12 @@ $(function() {
         // No code needed here
     }
 
-    function useItem(playerX) {
-        // TODO
-    }
-
     function surrender(playerX) {
         // Dynamic actor for both the player and opponent
         let actor = playerX;
-
+        
         actor_hp = parseInt($("#player-hp-value").text());
-
+        
         if (actor == "player") {
             $("#player-action").text("You have surrendered");
             $("#player-hp-value").text(0);
@@ -573,9 +642,58 @@ $(function() {
         }
     }
 
+    function heal(playerX) {
+        let actor = playerX;
+        // Initialize variables
+        let actor_hp;
 
+        if (actor == "player") {
+            actor_hp = parseInt($("#player-hp-value").text());
+        } else {
+            actor_hp = parseInt($("#opponent-hp-value").text());
+        }
 
+        // Heal player for 10 HP
+        actor_hp += 10;
 
+        if (actor == "player") {
+            $("#player-result").text("You received 10 HP back!");
+        } else {
+            $("#opponent-result").text(opponent + " got 10 HP back!");
+        }
+
+        // Prevent hp from going above 100
+        if (actor_hp > 100) {
+            actor_hp = 100;
+        }
+        // Create the string required to update the css "width" property
+        let actor_hp_percent = actor_hp + "%";
+
+        // Change css property
+        if (actor == "player") {
+            $("#player-hp").css("width", actor_hp_percent);
+        } else {
+            $("#opponent-hp").css("width", actor_hp_percent);
+        }
+
+    }
+
+    function empower(playerX) {
+        let actor = playerX;
+    }
+
+    function sap(playerX) {
+        let actor = playerX;
+    }
+
+    function fortify(playerX) {
+        let actor = playerX;
+    }
+    
+    function useItem(playerX, itemX) {
+        // TODO
+    }
+    
     function checkEndCondition() {
         let player_hp = $("#player-hp-value").text();
         let opponent_hp = $("#opponent-hp-value").text();
