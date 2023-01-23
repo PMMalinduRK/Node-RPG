@@ -6,7 +6,6 @@ $(function(){
     let player_id;
     let lobby_message;
     let player_count;
-    //let socket = io("http://localhost:3000");
     var socket = io();
 
     // Hide the cancel button until the player clicks on play
@@ -29,6 +28,13 @@ $(function(){
     $("#welcome-msg").text("Welcome "+player+"!");
     //
 
+    $("#btn-logout").click(function() {
+        // Expire player cookie by giving it a past expiry date
+        document.cookie = "player=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // Send back to login page
+        window.location.href = "/";
+    })
+
     $("#btn-play").click(function(){
         // Disable play button if looking for a match
         $(this).prop('disabled', true);
@@ -41,7 +47,7 @@ $(function(){
         // Add player to the waiting lobby
         $.ajax({
             type: "POST",
-            url: pubUrl + "/api/lobby",
+            url: localUrl + "/api/lobby",
             data: JSON.stringify({ "username": player }),
             contentType: "application/json",
             success: function (result) {
@@ -68,7 +74,7 @@ $(function(){
         // Remove player from the waiting lobby
         $.ajax({
             type: "DELETE",
-            url: pubUrl + "/api/lobby/"+player_id,
+            url: localUrl + "/api/lobby/"+player_id,
             success: function (result) {
                 // console.log(result);
                 // Show the number of players in lobby
@@ -85,7 +91,7 @@ $(function(){
         // Show the number of players in lobby
         $.ajax({
             type: "GET",
-            url: pubUrl + "/api/lobby/count/players",
+            url: localUrl + "/api/lobby/count/players",
             contentType : 'application/json',
             dataType : 'json',
             success: function (result) {
@@ -114,7 +120,7 @@ $(function(){
             // Remove player from the waiting lobby
             $.ajax({
                 type: "DELETE",
-                url: pubUrl + "/api/lobby/"+player_id,
+                url: localUrl + "/api/lobby/"+player_id,
                 success: function (result) {
                     // console.log(result);
                     // Show the number of players in lobby
