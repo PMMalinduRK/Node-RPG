@@ -16,17 +16,28 @@
     </head>
     <body>
         <div class="container text-center window">
-            <label for="player">Enter your username: </label>
-            <input type="text" name="player" id="username" required>
-            <label for="email">Enter your email: </label>
-            <input type="text" name="email" id="email" required>
-            <label for="password">Enter your password: </label>
-            <input type="password" name="password" id="password" required>
-            <label for="c_password">Confirm your password: </label>
-            <input type="password" name="c_password" id="c_password" required>
-            <button id="btn-signup">Signup</button> <br>
+            <div class="form">
+                <img src="../images/Node-RPG_logo.png" alt="logo" width="100%" style="margin-bottom: 20px;">
+                <div class="form-floating mb-3">
+                    <input type="text" name="player" class="form-control" id="username" placeholder="Username" required>
+                    <label for="player">Enter your username: </label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" name="email" class="form-control" id="email" placeholder="Email" required>
+                    <label for="email">Enter your email: </label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                    <label for="password">Enter your password: </label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" name="c_password" class="form-control" id="c_password" placeholder="Confirm Password" required>
+                    <label for="c_password">Confirm your password: </label>
+                </div>
+                <button class="btn btn-primary" id="btn-signup">Signup</button> <br>
     
-            <p>Already have an account? <a href="/">Log in</a></p>
+                <p>Already have an account? <a href="/">Log in</a></p>
+            </div> 
         </div>
     </body>
 </html>
