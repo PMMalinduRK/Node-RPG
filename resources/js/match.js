@@ -200,9 +200,14 @@ $(function() {
         // 6: empower
         // 7: sap
         // 8: fortify
-    function selectItem() {
+    $(".dropdown-item").click(function() {
+        
+    });
+    $(document).on('click', '.dropdown-item', function() {
+        // This will work!
         $("#player-action").text("You are ready to use the item...");
-        selected_item = $(this).text;
+        selected_item = $(this).text();
+        console.log(selected_item);
         switch(selected_item) {
             case "heal": player_action = 5; break;
             case "empower": player_action = 6; break;
@@ -212,7 +217,7 @@ $(function() {
         socket.emit("player action", player, player_action);
         // Disable all interactions until next round
         disableActions();
-    }
+    });
 
     // Opponent Actions
     socket.on("opponent action", function(playerX, action) {
@@ -382,7 +387,7 @@ $(function() {
         player_items.push(new_item);
 
         // Append to html
-        $("#item-dropdown").append("<li><a class='dropdown-item' onclick=selectItem()>"+ new_item +"</a></li>");
+        $("#item-dropdown").append("<li><a class='dropdown-item'>"+ new_item +"</a></li>");
 
         setTimeout(function(){
             $("#extra-message").text("You got " + new_item + "!");
@@ -500,27 +505,27 @@ $(function() {
             // Update actor hp (Stagger damage is a total of 15, with 5 from receivers logic and 10 from actor's logic)
             actor_hp_value = actor_hp - 5;
             if (actor == "player") {
-                $("#opponent-result").text("You got staggered for 15 damage!");
+                $("#opponent-result").append("You got staggered for 15 damage! <br>");
             } else {
-                $("#player-result").text(opponent + " got staggered for 15 damage!");
+                $("#player-result").append(opponent + " got staggered for 15 damage! <br>");
             }
         // Block bypassed
         } else if (receiver_action == 3){
             // Update receiver hp
             receiver_hp_value = receiver_hp - 5;
             if (actor == "player") {
-                $("#player-result").text("You broke the opponent's block for 5 damage!");
+                $("#player-result").append("You broke the opponent's block for 5 damage! <br>");
             } else {
-                $("#opponent-result").text(opponent + " broke your block for 5 damage!");
+                $("#opponent-result").append(opponent + " broke your block for 5 damage! <br>");
             }
         // Full swing
         } else {
             // Update receiver hp
             receiver_hp_value = receiver_hp - 20;
             if (actor == "player") {
-                $("#player-result").text("You did a full swing at the opponent for 20 damage!");
+                $("#player-result").append("You did a full swing at the opponent for 20 damage! <br>");
             } else {
-                $("#opponent-result").text(opponent + " did a full swing at you for 20 damage!");
+                $("#opponent-result").append(opponent + " did a full swing at you for 20 damage! <br>");
             }
         }
         
@@ -586,18 +591,17 @@ $(function() {
             // Update receiver hp
             receiver_hp_value = receiver_hp - 0;
             if (actor == "player") {
-                $("#opponent-result").text(opponent + " blocked the attack!");
+                $("#opponent-result").append(opponent + " blocked the attack! <br>");
             } else {
-                $("#player-result").text("You blocked the attack!");
+                $("#player-result").append("You blocked the attack! <br>");
             }
         } else {
             // Update receiver hp
             receiver_hp_value = receiver_hp - 10;
             if (actor == "player") {
-                $("#opponent-result").text(opponent + " received 10 damage!");
+                $("#player-result").append(opponent + " received 10 damage! <br>");
             } else {
-                // Change this to opponent-result, but also keep in mind that the heavy attack also modifies this value
-                $("#player-result").text("You received 10 damage!");
+                $("#opponent-result").append("You received 10 damage! <br>");
             }
         }
         
@@ -657,9 +661,9 @@ $(function() {
         actor_hp += 10;
 
         if (actor == "player") {
-            $("#player-result").text("You received 10 HP back!");
+            $("#player-result").append("You received 10 HP back! <br>");
         } else {
-            $("#opponent-result").text(opponent + " got 10 HP back!");
+            $("#opponent-result").append(opponent + " received 10 HP back! <br>");
         }
 
         // Prevent hp from going above 100
@@ -672,8 +676,10 @@ $(function() {
         // Change css property
         if (actor == "player") {
             $("#player-hp").css("width", actor_hp_percent);
+            $("#player-hp-value").text(actor_hp);
         } else {
             $("#opponent-hp").css("width", actor_hp_percent);
+            $("#opponent-hp-value").text(actor_hp);
         }
 
     }
