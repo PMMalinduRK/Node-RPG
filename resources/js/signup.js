@@ -11,7 +11,7 @@ $(function(){
 
         $.ajax({
             type: "POST",
-            url: localUrl + "/api/auth/signup",
+            url: pubUrl + "/api/auth/signup",
             data: JSON.stringify({ "username": username, "email": email, "password" : password }),
             contentType: "application/json",
             success: function (result) {

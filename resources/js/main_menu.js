@@ -55,7 +55,7 @@ $(function(){
         // Add player to the waiting lobby
         $.ajax({
             type: "POST",
-            url: localUrl + "/api/lobby",
+            url: pubUrl + "/api/lobby",
             data: JSON.stringify({ "username": player }),
             contentType: "application/json",
             success: function (result) {
@@ -82,7 +82,7 @@ $(function(){
         // Remove player from the waiting lobby
         $.ajax({
             type: "DELETE",
-            url: localUrl + "/api/lobby/"+player_id,
+            url: pubUrl + "/api/lobby/"+player_id,
             success: function (result) {
                 // console.log(result);
                 // Show the number of players in lobby
@@ -99,7 +99,7 @@ $(function(){
         // Show the number of players in lobby
         $.ajax({
             type: "GET",
-            url: localUrl + "/api/lobby/count/players",
+            url: pubUrl + "/api/lobby/count/players",
             contentType : 'application/json',
             dataType : 'json',
             success: function (result) {
@@ -133,7 +133,7 @@ $(function(){
             // Remove player from the waiting lobby
             $.ajax({
                 type: "DELETE",
-                url: localUrl + "/api/lobby/"+player_id,
+                url: pubUrl + "/api/lobby/"+player_id,
                 success: function (result) {
                     // console.log(result);
                     // Show the number of players in lobby

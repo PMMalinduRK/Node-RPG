@@ -10,7 +10,7 @@ $(function(){
         // POST request to the api
         $.ajax({
             type: "POST",
-            url: localUrl + "/api/auth/signin",
+            url: pubUrl + "/api/auth/signin",
             data: JSON.stringify({ "username": username, "password" : password }),
             contentType: "application/json",
             success: function (result) {
@@ -18,7 +18,7 @@ $(function(){
                 // GET the response and set it to the header of user api
                 $.ajax({
                     type : "GET", 
-                    url : localUrl + "/api/test/user", 
+                    url : pubUrl + "/api/test/user", 
                     beforeSend: function(xhr){xhr.setRequestHeader('x-access-token', result.accessToken);},
                     success : function(result) { 
                         console.log(result);

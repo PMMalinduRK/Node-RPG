@@ -12,11 +12,11 @@ const corsOrigin = "http://localhost:3001";
 
 // This is for making requests through the server
 let XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-let url = localUrl + '/api/match/';
+let url = pubUrl + '/api/match/';
 
 
 var corsOptions = {
-    origin: corsOrigin
+    origin: pubUrl
 };
 
 app.use(cors(corsOptions));
