@@ -11,7 +11,6 @@ describe("login.html test", () => {
     const dom = new JSDOM(html);
     const input_user = dom.window.document.querySelector("#username");
     const input_pass = dom.window.document.querySelector("#password");
-    const button_login = dom.window.document.querySelector("#btn-login");
 
     before(() => {
         //This part executes once before all tests
@@ -47,19 +46,9 @@ describe("login.html test", () => {
         });
         
         it("should update the value when the value attribute is changed", () => {
-            input_pass.setAttribute("value", "password");
-            assert.strictEqual(input_pass.value, "password");
+            input_pass.setAttribute("value", "123456");
+            assert.strictEqual(input_pass.value, "123456");
         });
-    });
-
-    describe("Login button", () => {
-        /* it("should be enable when the page loads", () => {
-            assert.strictEqual(button.hasAttribute("disabled"), false);
-        });
-        it("should be clickable", () => {
-            button_login.removeAttribute("disabled");
-            assert.strictEqual(button_login.getAttribute("disabled"), "");
-        }); */
     });
 
     /* it("Is returning 6 when multiplying 2 * 3", () => {
@@ -77,4 +66,59 @@ describe("login.html test", () => {
 	it("Are both the sentences matching", () => {
 	expect("This is working").to.equal('This is working');
 	}); */
+});
+
+
+describe("signup.html test", () => {
+    const filePath = path.join(__dirname, "../resources/html/signup.html");
+    const html = fs.readFileSync(filePath, "utf-8");
+    const dom = new JSDOM(html);
+    const input_user = dom.window.document.querySelector("#username");
+    const input_email = dom.window.document.querySelector("#email");
+    const input_pass = dom.window.document.querySelector("#password");
+    const input_cpass = dom.window.document.querySelector("#c_password");
+
+    describe("Username field", () => {
+        it("should have an empty field when the page loads", () => {
+            assert.strictEqual(input_user.value, "");
+        });
+        
+        it("should update the value when the value attribute is changed", () => {
+            input_user.setAttribute("value", "Mark");
+            assert.strictEqual(input_user.value, "Mark");
+        });
+    });
+
+    describe("Email field", () => {
+        it("should have an empty field when the page loads", () => {
+            assert.strictEqual(input_email.value, "");
+        });
+        
+        it("should update the value when the value attribute is changed", () => {
+            input_email.setAttribute("value", "mark@gmail.com");
+            assert.strictEqual(input_email.value, "mark@gmail.com");
+        });
+    });
+
+    describe("Password field", () => {
+        it("should have an empty field when the page loads", () => {
+            assert.strictEqual(input_pass.value, "");
+        });
+        
+        it("should update the value when the value attribute is changed", () => {
+            input_pass.setAttribute("value", "123456");
+            assert.strictEqual(input_pass.value, "123456");
+        });
+    });
+
+    describe("Confirm password field", () => {
+        it("should have an empty field when the page loads", () => {
+            assert.strictEqual(input_cpass.value, "");
+        });
+        
+        it("should update the value when the value attribute is changed", () => {
+            input_cpass.setAttribute("value", "123456");
+            assert.strictEqual(input_cpass.value, "123456");
+        });
+    });
 });
