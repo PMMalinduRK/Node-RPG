@@ -14,8 +14,8 @@ jobs:
 
       - run:
           name: Test
-          command: npm test
+          command: npm run test
 
       - run:
           name: Build
-          command: npm run build
+          command: nodemon start
