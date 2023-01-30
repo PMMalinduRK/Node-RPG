@@ -640,9 +640,11 @@ $(function() {
         if (actor == "player") {
             $("#player-action").text("You have surrendered");
             $("#player-hp-value").text(0);
+            $("#player-hp").css("width", "0%");
         } else {
             $("#opponent-action").text(opponent + " has surrendered");
             $("#opponent-hp-value").text(0);
+            $("#opponent-hp").css("width", "0%");
         }
     }
 
