@@ -1,6 +1,8 @@
 $(function(){
-    const localUrl = "http://localhost:3000";
-    const pubUrl = "https://node-rpg.onrender.com";
+    // Local URL
+    const hostUrl = "http://localhost:3000";
+    // Render URL
+    //const hostUrl = "https://node-rpg.onrender.com";
 
     $("#btn-signup").click(function(){
         // Initialize booleans for validation
@@ -48,7 +50,7 @@ $(function(){
         if (usernameValid && emailValid && passwordValid && cpasswordValid) {
             $.ajax({
                 type: "POST",
-                url: localUrl + "/api/auth/signup",
+                url: hostUrl + "/api/auth/signup",
                 data: JSON.stringify({ "username": username, "email": email, "password" : password }),
                 contentType: "application/json",
                 success: function (result) {

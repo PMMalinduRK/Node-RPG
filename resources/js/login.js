@@ -1,7 +1,8 @@
 $(function(){
-
-    const localUrl = "http://localhost:3000";
-    const pubUrl = "https://node-rpg.onrender.com";
+    // Local URL
+    const hostUrl = "http://localhost:3000";
+    // Render URL
+    //const hostUrl = "https://node-rpg.onrender.com";
 
     $("#btn-login").click(function(){
         // Initialize booleans for validation
@@ -30,7 +31,7 @@ $(function(){
             // POST request to the api
             $.ajax({
                 type: "POST",
-                url: localUrl + "/api/auth/signin",
+                url: hostUrl + "/api/auth/signin",
                 data: JSON.stringify({ "username": username, "password" : password }),
                 contentType: "application/json",
                 success: function (result) {
@@ -38,7 +39,7 @@ $(function(){
                     // GET the response and set it to the header of user api
                     $.ajax({
                         type : "GET", 
-                        url : localUrl + "/api/test/user", 
+                        url : hostUrl + "/api/test/user", 
                         beforeSend: function(xhr){xhr.setRequestHeader('x-access-token', result.accessToken);},
                         success : function(result) { 
                             console.log(result);

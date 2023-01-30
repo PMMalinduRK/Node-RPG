@@ -1,11 +1,19 @@
 // Required modules
 const fs = require("fs");
 const path = require("path");
+const nock = require('nock'); // For mock tests
 const request = require('request');
 const assert = require('assert');
+const chai = require('chai');
+const { expect } = chai;
 const puppeteer = require('puppeteer'); // To simulate webpage events
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+
+// Local URL
+const hostUrl = "http://localhost:3000";
+// Render URL
+//const hostUrl = "https://node-rpg.onrender.com";
 
 // Unit tests
 
@@ -127,20 +135,24 @@ describe("signup.html unit tests", () => {
     });
 });
 
+
+/* describe("main_menu.html unit tests", () => {
+    before(() => {
+        //This part executes once before all tests
+        
+    });
+    describe("")
+}); */
+
+
+
 // Integration Tests
 
 describe("login.html integration tests", () => {
-    const filePath = path.join(__dirname, "../resources/html/login.html");
-    const html = fs.readFileSync(filePath, "utf-8");
-    const dom = new JSDOM(html);
-    const input_user = dom.window.document.querySelector("#username");
-    const input_pass = dom.window.document.querySelector("#password");
-    const button_login = dom.window.document.querySelector("#btn-login");
-
     describe("Login button", () => {
         it("POST /api/auth/signin responds with status OK", (done) => {
             const options = {
-                url: 'http://localhost:3000/api/auth/signin',
+                url: hostUrl + '/api/auth/signin',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -157,14 +169,13 @@ describe("login.html integration tests", () => {
         });
 
         it("button click responds with status OK", async(done) => {
-            this.timeout(5000);
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
-            await page.goto('http://localhost:3000');
+            await page.goto(hostUrl);
             await page.type('input#username', 'Mark');
             await page.type('input#password', '123456');
             await page.click('button#btn-login');
-            const request = await page.waitForRequest('http://localhost:3000/api/auth/signin', {
+            const request = await page.waitForRequest(hostUrl + '/api/auth/signin', {
                 timeout: 1000
             });
             expect(request.method()).to.equal('POST');
@@ -176,15 +187,73 @@ describe("login.html integration tests", () => {
             // Dispatch a click event on the button
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
-            await page.goto('http://localhost:3000');
+            await page.goto(hostUrl);
             await page.type('input#username', 'Mark');
             await page.type('input#password', '123456');
             await page.click('button#btn-login');
             await page.waitForNavigation();
-            const url = await page.url();
-            expect(url).to.equal('http://localhost:3000/main');
+            const url = page.url();
+            expect(url).to.equal(hostUrl + '/main');
             await browser.close();
             done();
-        }, 5000);
+        });
+    });
+});
+
+
+describe("signup.html integration tests", () => {
+    describe("Signup button", () => {
+        it("mock POST /api/auth/signup responds with status OK", (done) => {
+            nock(hostUrl)
+            .post('/api/auth/signup')
+            .reply(200, { message: 'Success' });
+
+            request.post({
+                url: hostUrl + '/api/auth/signup',
+                json: true,
+                body: {
+                    username: 'test',
+                    email: 'test@gmail.com',
+                    password: '123456'
+                }
+            }, (error, response, body) => {
+                expect(body).to.deep.equal({ message: 'Success' });
+                done();
+            });
+        });
+
+        it("button click responds with status OK", async(done) => {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto(hostUrl);
+            await page.type('input#username', 'test');
+            await page.type('input#email', 'test@gmail.com');
+            await page.type('input#password', 'test123');
+            await page.type('input#c_password', 'test123');
+            await page.click('button#btn-signup');
+            const request = await page.waitForRequest(hostUrl + '/api/auth/signup', {
+                timeout: 1000
+            });
+            expect(request.method()).to.equal('POST');
+            await browser.close();
+            done();
+        });
+
+        it("redirects user to main menu", async(done) => {
+            // Dispatch a click event on the button
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto(hostUrl);
+            await page.type('input#username', 'test');
+            await page.type('input#email', 'test@gmail.com');
+            await page.type('input#password', 'test123');
+            await page.type('input#c_password', 'test123');
+            await page.click('button#btn-signup');
+            await page.waitForNavigation();
+            const url = page.url();
+            expect(url).to.equal(hostUrl + '/main');
+            await browser.close();
+            done();
+        });
     });
 });
