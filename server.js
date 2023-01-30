@@ -108,6 +108,7 @@ io.on("connection", (socket) => {
         if(player_array.length == 2){
             // Get date for the construction of match_id
             const date = new Date();
+            date.toISOString();
 
             // Process the json data
             let player1 = player_array[0];

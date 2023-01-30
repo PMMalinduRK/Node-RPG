@@ -8,6 +8,7 @@ const chai = require('chai');
 const { expect } = chai;
 const puppeteer = require('puppeteer'); // To simulate webpage events
 const jsdom = require("jsdom");
+const { beforeEach } = require("mocha");
 const { JSDOM } = jsdom;
 
 // Local URL
@@ -137,13 +138,21 @@ describe("signup.html unit tests", () => {
 
 
 /* describe("main_menu.html unit tests", () => {
-    before(() => {
+    beforeEach(async () => {
         //This part executes once before all tests
-        
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(hostUrl);
+        await page.type('input#username', 'Mark');
+        await page.type('input#password', '123456');
+        await page.click('button#btn-login');
+        await page.waitForNavigation();
     });
-    describe("")
-}); */
+    describe("username is displayed in menu", () => {
 
+    });
+});
+ */
 
 
 // Integration Tests
