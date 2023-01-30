@@ -1,8 +1,9 @@
-// Requiring module
+// Required modules
 const fs = require("fs");
 const path = require("path");
 const request = require('request');
 const assert = require('assert');
+const puppeteer = require('puppeteer'); // To simulate webpage events
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
@@ -129,8 +130,15 @@ describe("signup.html unit tests", () => {
 // Integration Tests
 
 describe("login.html integration tests", () => {
-    describe('POST /api/auth/signin', function() {
-        it('responds with status OK', (done) => {
+    const filePath = path.join(__dirname, "../resources/html/login.html");
+    const html = fs.readFileSync(filePath, "utf-8");
+    const dom = new JSDOM(html);
+    const input_user = dom.window.document.querySelector("#username");
+    const input_pass = dom.window.document.querySelector("#password");
+    const button_login = dom.window.document.querySelector("#btn-login");
+
+    describe("Login button", () => {
+        it("POST /api/auth/signin responds with status OK", (done) => {
             const options = {
                 url: 'http://localhost:3000/api/auth/signin',
                 method: 'POST',
@@ -142,11 +150,41 @@ describe("login.html integration tests", () => {
                     password: '123456'
                 }
             };
-
             request(options, (err, res, body) => {
                 assert.equal(res.statusCode, 200);
                 done();
             });
         });
+
+        it("button click responds with status OK", async(done) => {
+            this.timeout(5000);
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto('http://localhost:3000');
+            await page.type('input#username', 'Mark');
+            await page.type('input#password', '123456');
+            await page.click('button#btn-login');
+            const request = await page.waitForRequest('http://localhost:3000/api/auth/signin', {
+                timeout: 1000
+            });
+            expect(request.method()).to.equal('POST');
+            await browser.close();
+            done();
+        });
+
+        it("redirects user to main menu", async(done) => {
+            // Dispatch a click event on the button
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto('http://localhost:3000');
+            await page.type('input#username', 'Mark');
+            await page.type('input#password', '123456');
+            await page.click('button#btn-login');
+            await page.waitForNavigation();
+            const url = await page.url();
+            expect(url).to.equal('http://localhost:3000/main');
+            await browser.close();
+            done();
+        }, 5000);
     });
 });

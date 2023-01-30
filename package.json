@@ -4,7 +4,7 @@
   "description": "Node based role-playing-game",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --recursive --exit",
+    "test": "mocha --recursive --exit --timeout 10000",
     "start": "node server.js"
   },
   "author": "",
@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.0",
     "mocha": "^10.2.0",
     "mongoose": "^5.13.13",
+    "puppeteer": "^19.6.2",
     "request": "^2.88.2",
     "socket.io": "^4.5.4",
     "uuid": "^9.0.0",
