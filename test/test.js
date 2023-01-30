@@ -1,11 +1,14 @@
 // Requiring module
 const fs = require("fs");
 const path = require("path");
+const request = require('request');
 const assert = require('assert');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
-describe("login.html test", () => {
+// Unit tests
+
+describe("login.html unit tests", () => {
     const filePath = path.join(__dirname, "../resources/html/login.html");
     const html = fs.readFileSync(filePath, "utf-8");
     const dom = new JSDOM(html);
@@ -69,7 +72,7 @@ describe("login.html test", () => {
 });
 
 
-describe("signup.html test", () => {
+describe("signup.html unit tests", () => {
     const filePath = path.join(__dirname, "../resources/html/signup.html");
     const html = fs.readFileSync(filePath, "utf-8");
     const dom = new JSDOM(html);
@@ -119,6 +122,31 @@ describe("signup.html test", () => {
         it("should update the value when the value attribute is changed", () => {
             input_cpass.setAttribute("value", "123456");
             assert.strictEqual(input_cpass.value, "123456");
+        });
+    });
+});
+
+// Integration Tests
+
+describe("login.html integration tests", () => {
+    describe('POST /api/auth/signin', function() {
+        it('responds with status OK', (done) => {
+            const options = {
+                url: 'http://localhost:3000/api/auth/signin',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                form: {
+                    username: 'Mark',
+                    password: '123456'
+                }
+            };
+
+            request(options, (err, res, body) => {
+                assert.equal(res.statusCode, 200);
+                done();
+            });
         });
     });
 });
