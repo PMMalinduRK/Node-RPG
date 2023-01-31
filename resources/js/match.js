@@ -32,6 +32,19 @@ $(function() {
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
 
+    // Fetch match id
+    let match_id;
+    let match_cookie = "match_id=";  
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(match_cookie) == 0) {
+            match_id = c.substring(match_cookie.length, c.length);
+        }
+    }
+
     // Fetch player name from cookie
     let player;
     let name = "player=";  
@@ -728,42 +741,33 @@ $(function() {
 
     function tie() {
         $("#extra-message").text("Match tied!");
-        // Clear opponent cookie
-        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-        let count = 10;
-        var timer = setInterval(function() {
-            if (count !== 0) {
-                $('#countdown').text(count -= 1);
-            } else {
-                clearInterval(timer);
-                // Start this function when the time ends
-                // Load main menu
-                window.location.href = "/main";
-            }
-        }, 1000); 
+        // Send the victor to the matchEnd function
+        matchEnd("tied");
     }
 
     function playerWin() {
         $("#extra-message").text("You win!");
-        // Clear opponent cookie
-        document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-        let count = 10;
-        var timer = setInterval(function() {
-            if (count !== 0) {
-                $('#countdown').text(count -= 1);
-            } else {
-                clearInterval(timer);
-                // Start this function when the time ends
-                // Load main menu
-                window.location.href = "/main";
-            }
-        }, 1000); 
+        matchEnd(player);
     }
 
     function opponentWin() {
         $("#extra-message").text("You lose!");
+        matchEnd(opponent);
+    }
+
+    function matchEnd(victor) {
+        $.ajax({
+            type: "PUT",
+            url: "/api/match/" + match_id,
+            data: { 
+                match_condition: "ended",
+                rounds: round,
+                victor: victor
+            }
+        }).done(function( msg ) {
+            console.log("Update successful: " + msg );
+        });
+          
         // Clear opponent cookie
         document.cookie = "opponent=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 

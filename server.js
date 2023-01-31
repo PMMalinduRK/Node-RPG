@@ -7,9 +7,9 @@ const path = require('path');
 const { Server } = require("socket.io");
 const io = new Server(server);
 // Local URL
-//const hostUrl = "http://localhost:3000";
+const hostUrl = "http://localhost:3000";
 // Render URL
-const hostUrl = "https://node-rpg.onrender.com";
+/* const hostUrl = "https://node-rpg.onrender.com"; */
 const corsOrigin = "http://localhost:3001";
 
 // This is for making requests through the server
@@ -119,27 +119,27 @@ io.on("connection", (socket) => {
                     "match_id": match_id,
                     "player1": player1,
                     "player2": player2,
-                    "match_data": {
-                        "player1": {
-                            "hp": "100",
-                            "ep": "100"
-                        },
-                        "player2": {
-                            "hp": "100",
-                            "ep": "100"
-                        }
-                    }
+                    "match_condition": "ongoing",
+                    "rounds": 0,
+                    "victor": "TBA"
                 }
             )
 
             // Create a POST request through the server to create a match and add the two players into the match
+            let response;
             let xhr = new XMLHttpRequest();
             xhr.open('POST',url);
             xhr.setRequestHeader('Content-Type','application/json');
             xhr.send(data);
+            // Get the response of the post request
+            xhr.onreadystatechange = function() {
+                response = xhr.responseText;
+                console.log(response);
 
-            // After the POST, send both players to the match
-            io.emit("enter match", player1, player2);
+                // After the POST, send both players to the match
+                io.emit("enter match", player1, player2, response._id);
+            };            
+            
             // Clear player_array for next function
             player_array = [];
         }

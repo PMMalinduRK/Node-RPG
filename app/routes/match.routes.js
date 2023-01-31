@@ -5,6 +5,9 @@ module.exports = app => {
   
     // Create a new Match
     router.post("/", match.create);
+
+    // Update match at the end
+    router.put("/:id", match.update);
   
     app.use('/api/match', router);
   };

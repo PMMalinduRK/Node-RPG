@@ -1,9 +1,9 @@
 // TODO put all ajax calls in separate functions
 $(function(){
     // Local URL
-    //const hostUrl = "http://localhost:3000";
+    const hostUrl = "http://localhost:3000";
     // Render URL
-    const hostUrl = "https://node-rpg.onrender.com";
+    /* const hostUrl = "https://node-rpg.onrender.com"; */
     // Initialize variables for later use
     let player_id;
     let lobby_message;
@@ -123,7 +123,7 @@ $(function(){
         });
     });
 
-    socket.on("enter match", function(player1, player2){
+    socket.on("enter match", function(player1, player2, match_id){
         $("#players-lfm").hide();
         $("#welcome-msg").text("Match found!");
         setTimeout(function(){
@@ -150,6 +150,7 @@ $(function(){
             } else {
                 document.cookie = "opponent="+encodeURIComponent(player1);
             }
+            document.cookie = "match_id="+encodeURIComponent(match_id);
             // Load match
             setTimeout(function(){
                 window.location.href = "/match";

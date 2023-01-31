@@ -6,16 +6,9 @@ const Match = mongoose.model(
         match_id: String,
         player1: String,
         player2: String,
-        match_data: {
-            player1: {
-                hp: Number,
-                ep: Number
-            },
-            player2: {
-                hp: Number,
-                ep: Number
-            }
-        }
+        match_condition: String,
+        rounds: Number,
+        victor: String
     })
 );
 
