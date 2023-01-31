@@ -7,9 +7,9 @@ const path = require('path');
 const { Server } = require("socket.io");
 const io = new Server(server);
 // Local URL
-const hostUrl = "http://localhost:3000";
+/* const hostUrl = "http://localhost:3000"; */
 // Render URL
-/* const hostUrl = "https://node-rpg.onrender.com"; */
+const hostUrl = "https://node-rpg.onrender.com";
 const corsOrigin = "http://localhost:3001";
 
 // This is for making requests through the server
