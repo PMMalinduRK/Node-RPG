@@ -1,9 +1,9 @@
 // TODO put all ajax calls in separate functions
 $(function(){
     // Local URL
-    /* const hostUrl = "http://localhost:3000"; */
+    const hostUrl = "http://localhost:3000";
     // Render URL
-    const hostUrl = "https://node-rpg.onrender.com";
+    /* const hostUrl = "https://node-rpg.onrender.com"; */
     // Initialize variables for later use
     let player_id;
     let lobby_message;
